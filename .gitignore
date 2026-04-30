@@ -1,0 +1,12 @@
+# macOS
+.DS_Store
+._*
+
+# Editor / tooling
+.claude/
+.vscode/
+.idea/
+
+# Large media — host externally, not in the repo
+audiobook full.mp3
+*.mp3

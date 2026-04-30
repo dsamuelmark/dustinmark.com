@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dustin Mark — Style 3 (Staggered Column)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu+Condensed&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --cream: #0F0F17;
+            --ink: #E8E4D9;
+            --coral: #FF5C47;
+            --yellow: #EDD93A;
+            --teal: #50D9C4;
+            --lavender: #C4B8F5;
+            --sage: #9FCBAA;
+            --dark: #07070F;
+            --mid: #1A1A2A;
+            --surface: #1C1C2C;
+            --muted: rgba(232,228,217,0.5);
+            --font-display: 'Ubuntu Condensed', Arial Narrow, sans-serif;
+            --font-body: 'Ubuntu', system-ui, sans-serif;
+            --ease: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        html { scroll-behavior: smooth; }
+        body { font-family: var(--font-body); background: var(--cream); color: var(--ink); overflow-x: hidden; line-height: 1.6; }
+
+        /* ── NAV ── */
+        nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 1.25rem 2rem; display: flex; justify-content: space-between; align-items: center; transition: background var(--ease), box-shadow var(--ease); }
+        nav.scrolled { background: rgba(15,15,23,0.96); backdrop-filter: blur(12px); box-shadow: 0 1px 0 rgba(255,255,255,0.05); }
+        .nav-logo { font-family: var(--font-display); font-weight: 900; font-size: 1.25rem; color: var(--ink); text-decoration: none; letter-spacing: -0.02em; }
+        .nav-links { display: flex; gap: 2rem; list-style: none; }
+        .nav-links a { text-decoration: none; color: var(--ink); font-size: 0.8rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; position: relative; }
+        .nav-links a::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 2px; background: var(--coral); transition: width var(--ease); }
+        .nav-links a:hover::after { width: 100%; }
+
+        /* ── HERO (Style 3: Split Two-Column) ── */
+        #hero {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1.3fr 1fr;
+            grid-template-rows: 1fr auto;
+            gap: 0 3rem;
+            align-items: center;
+            padding: 8rem 3rem 5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-left { grid-column: 1; grid-row: 1; }
+        .hero-right {
+            grid-column: 2;
+            grid-row: 1;
+            padding-top: 9rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+        .hero-eyebrow {
+            font-size: 0.72rem;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--coral);
+            font-weight: 700;
+            margin-bottom: 1.25rem;
+        }
+        .hero-name {
+            font-family: var(--font-display);
+            font-size: clamp(5rem, 13vw, 11.5rem);
+            font-weight: 900;
+            line-height: 0.88;
+            letter-spacing: -0.04em;
+            margin-bottom: 3rem;
+        }
+        .hero-name span { display: block; }
+        .hero-name .last { color: var(--coral); font-style: italic; }
+        .hero-op-label {
+            font-size: 0.68rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: rgba(232,228,217,0.35);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        .rotating-word {
+            font-family: var(--font-display);
+            font-size: clamp(1.6rem, 3vw, 2.4rem);
+            font-weight: 900;
+            color: var(--ink);
+            letter-spacing: -0.02em;
+            line-height: 1.15;
+            border-bottom: 3px solid var(--yellow);
+            padding-bottom: 0.15em;
+            display: inline-block;
+            margin-bottom: 1.75rem;
+            transition: opacity 0.28s ease;
+        }
+        .hero-avail {
+            font-size: 0.7rem;
+            letter-spacing: 0.1em;
+            color: rgba(232,228,217,0.38);
+            line-height: 1.6;
+        }
+        .hero-cta { display: flex; gap: 1rem; flex-wrap: wrap; }
+        .hero-scroll {
+            position: absolute;
+            bottom: 3rem; left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            color: rgba(232,228,217,0.3);
+            font-size: 0.7rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+        .hero-scroll::after {
+            content: '';
+            width: 1px; height: 54px;
+            background: linear-gradient(to bottom, rgba(232,228,217,0.3), transparent);
+            animation: scrollPulse 2s ease-in-out infinite;
+        }
+        @keyframes scrollPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.25; } }
+
+        /* ── BUTTONS ── */
+        .btn {
+            display: inline-flex; align-items: center; justify-content: center;
+            outline: none; cursor: pointer; padding: 0 2rem; height: 50px;
+            border-radius: 30px; transition: all 0.2s ease;
+            font-family: var(--font-body); font-size: 0.875rem; font-weight: 600;
+            text-decoration: none; letter-spacing: 0.03em; position: relative;
+        }
+        .btn-primary { background-image: linear-gradient(to top, #c93d2b 0%, #ff6652 80%, #ff7060 100%); border: 1px solid #a33020; color: white; text-shadow: 0 1px rgba(0,0,0,0.3); }
+        .btn-primary:hover { box-shadow: 0 4px 3px 1px rgba(255,80,60,0.12), 0 6px 8px rgba(150,40,20,0.35), 0 -4px 4px rgba(180,50,30,0.2), 0 -6px 4px rgba(255,100,80,0.08), inset 0 0 3px 3px rgba(160,30,10,0.25); }
+        .btn-primary:active { box-shadow: 0 4px 3px 1px rgba(255,80,60,0.1), 0 6px 8px rgba(150,40,20,0.3), 0 -4px 4px rgba(180,50,30,0.15), 0 -6px 4px rgba(255,100,80,0.06), inset 0 0 5px 3px rgba(120,20,5,0.4), inset 0 0 30px rgba(140,30,10,0.3); }
+        .btn-secondary { background-image: linear-gradient(to top, #0a0a14 0%, #1a1a2c 80%, #1e1e32 100%); border: 1px solid rgba(255,255,255,0.12); color: var(--ink); }
+        .btn-secondary:hover { box-shadow: 0 4px 3px 1px rgba(40,40,60,0.9), 0 6px 8px rgba(5,5,15,0.7), 0 -4px 4px rgba(15,15,30,0.6), 0 -6px 4px rgba(50,50,80,0.5), inset 0 0 3px 3px rgba(5,5,15,0.5); }
+        .btn-secondary:active { box-shadow: 0 4px 3px 1px rgba(40,40,60,0.9), 0 6px 8px rgba(5,5,15,0.7), 0 -4px 4px rgba(15,15,30,0.6), 0 -6px 4px rgba(50,50,80,0.5), inset 0 0 5px 3px rgba(0,0,10,0.6), inset 0 0 30px rgba(5,5,20,0.5); }
+
+        /* Eyes reveal on hero CTAs */
+        .hero-cta .btn { overflow: hidden; transition: padding-left 0.35s ease, box-shadow 0.2s ease; }
+        .hero-cta .btn::before {
+            content: ''; position: absolute; left: 0.7rem; top: 50%;
+            transform: translateY(-50%) scaleX(0); transform-origin: left center;
+            width: 44px; height: 26px;
+            background: url('dmpic1.jpg') center 22% / 360% auto no-repeat;
+            border-radius: 4px; opacity: 0;
+            transition: opacity 0.32s ease, transform 0.32s ease; pointer-events: none;
+        }
+        .hero-cta .btn:hover::before { opacity: 1; transform: translateY(-50%) scaleX(1); }
+        .hero-cta .btn:hover { padding-left: 3.6rem; }
+
+        /* ── SHARED SECTION STYLES ── */
+        section { padding: 7rem 2rem; }
+        .container { max-width: 1200px; margin: 0 auto; }
+
+        /* ── DECORATIVE SECTION NUMBERS ── */
+        .section-heading-wrap { position: relative; margin-bottom: 3rem; }
+        .section-deco-num {
+            position: absolute;
+            top: -0.3em;
+            left: -0.08em;
+            font-family: var(--font-display);
+            font-size: clamp(9rem, 22vw, 20rem);
+            font-weight: 900;
+            letter-spacing: -0.05em;
+            color: var(--ink);
+            opacity: 0.033;
+            line-height: 1;
+            pointer-events: none;
+            z-index: 0;
+            user-select: none;
+        }
+        .section-heading-wrap .section-label,
+        .section-heading-wrap .section-title,
+        .section-heading-wrap .section-intro { position: relative; z-index: 1; }
+
+        .section-label {
+            font-size: 0.7rem; letter-spacing: 0.22em; text-transform: uppercase;
+            color: var(--coral); font-weight: 700; margin-bottom: 1rem;
+            display: flex; align-items: center; gap: 0.75rem;
+        }
+        .section-label::before { content: ''; display: inline-block; width: 2rem; height: 2px; background: var(--coral); flex-shrink: 0; }
+        .section-title {
+            font-family: var(--font-display);
+            font-size: clamp(2.75rem, 6vw, 5rem);
+            font-weight: 900; line-height: 0.95; letter-spacing: -0.03em; margin-bottom: 1.5rem;
+        }
+        .section-intro { font-size: 1.1rem; color: var(--muted); max-width: 600px; margin-bottom: 4rem; line-height: 1.72; }
+
+        /* ── FADE IN ── */
+        .fade-in { opacity: 0; transform: translateY(28px); transition: opacity 0.6s ease, transform 0.6s ease; }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+        /* ── PUBLISHED WORK (cards) ── */
+        #work { border-top: 1px solid rgba(255,255,255,0.07); }
+        .work-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap: 1.75rem; }
+        .work-card { background: var(--surface); border-radius: 8px; overflow: hidden; border: 1px solid rgba(255,255,255,0.07); transition: transform var(--ease), box-shadow var(--ease); }
+        .work-card:hover { transform: translateY(-6px); box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
+        .work-card-accent { height: 5px; }
+        .work-card-body { padding: 1.75rem; }
+        .work-pub { font-size: 0.7rem; letter-spacing: 0.13em; text-transform: uppercase; font-weight: 700; margin-bottom: 0.75rem; }
+        .work-title { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; line-height: 1.3; margin-bottom: 0.65rem; }
+        .work-desc { font-size: 0.875rem; color: var(--muted); line-height: 1.62; margin-bottom: 1.25rem; }
+        .work-meta { display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem; color: rgba(232,228,217,0.3); }
+        .work-link { font-size: 0.78rem; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 0.3rem; transition: gap var(--ease); }
+        .work-link:hover { gap: 0.6rem; }
+
+        /* ── THE DUSTIN MARK PROJECT ── */
+        #project { background: var(--dark); color: var(--cream); }
+        #project .section-label { color: var(--yellow); }
+        #project .section-label::before { background: var(--yellow); }
+        #project .section-title { color: var(--ink); }
+        #project .section-intro { color: rgba(250,247,240,0.65); }
+        #project .section-deco-num { color: var(--yellow); opacity: 0.06; }
+        .project-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; }
+        .project-col-title { font-family: var(--font-display); font-size: 1.6rem; color: var(--yellow); margin-bottom: 1.5rem; }
+        .episode-list { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 2rem; }
+        .episode-item { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.09); border-radius: 6px; padding: 0.9rem 1.1rem; display: flex; align-items: center; gap: 1rem; cursor: pointer; transition: background var(--ease), border-color var(--ease); }
+        .episode-item:hover, .episode-item.active { background: rgba(244,200,66,0.12); border-color: rgba(244,200,66,0.4); }
+        .ep-play { width: 34px; height: 34px; border-radius: 50%; background: var(--yellow); display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--dark); font-size: 0.7rem; }
+        .ep-info { flex: 1; }
+        .ep-title { font-weight: 600; font-size: 0.875rem; color: var(--ink); }
+        .ep-sub { font-size: 0.72rem; color: rgba(250,247,240,0.45); margin-top: 0.15rem; }
+        .ep-tag { font-size: 0.72rem; color: rgba(250,247,240,0.4); white-space: nowrap; }
+        .spotify-btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.7rem 1.4rem; background: #1DB954; color: white; border-radius: 50px; text-decoration: none; font-weight: 700; font-size: 0.85rem; transition: all var(--ease); }
+        .spotify-btn:hover { background: #19a349; transform: scale(1.03); }
+        .book-cards { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1.5rem; }
+        .book-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.09); border-radius: 8px; padding: 1.2rem; display: flex; gap: 1.2rem; align-items: center; transition: background var(--ease); }
+        .book-card:hover { background: rgba(255,255,255,0.09); }
+        .book-cover { width: 66px; height: 94px; border-radius: 4px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; }
+        .book-cover.b1 { background: linear-gradient(135deg, var(--lavender), #6fa3d4); }
+        .book-cover.b2 { background: linear-gradient(135deg, var(--teal), var(--sage)); }
+        .book-info h4 { font-family: var(--font-display); font-size: 1.05rem; margin-bottom: 0.35rem; }
+        .book-info p { font-size: 0.78rem; color: rgba(250,247,240,0.55); line-height: 1.5; margin-bottom: 0.7rem; }
+        .book-actions { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+        .btn-ghost { padding: 0.35rem 0.9rem; border: 1px solid rgba(255,255,255,0.25); border-radius: 3px; color: var(--ink); text-decoration: none; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.05em; transition: all var(--ease); cursor: pointer; background: transparent; font-family: var(--font-body); }
+        .btn-ghost:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.5); }
+        .btn-ghost.yellow { border-color: var(--yellow); color: var(--yellow); }
+        .btn-ghost.yellow:hover { background: rgba(244,200,66,0.12); }
+        .audiobook-player { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 1.4rem; margin-bottom: 1rem; }
+        .ab-label { font-size: 0.68rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--yellow); margin-bottom: 0.6rem; }
+        .player-track { font-family: var(--font-display); font-size: 1.1rem; margin-bottom: 1.1rem; color: rgba(250,247,240,0.8); }
+        .player-controls { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem; }
+        .player-btn { background: none; border: none; color: var(--ink); cursor: pointer; padding: 0.4rem; border-radius: 50%; transition: background var(--ease), color var(--ease); display: flex; align-items: center; }
+        .player-btn:hover { background: rgba(255,255,255,0.1); color: var(--yellow); }
+        .player-btn.pp { width: 44px; height: 44px; background: var(--yellow); color: var(--dark); }
+        .player-btn.pp:hover { background: #ddb400; color: var(--dark); }
+        .player-progress { flex: 1; height: 4px; background: rgba(255,255,255,0.12); border-radius: 2px; cursor: pointer; position: relative; }
+        .player-fill { height: 100%; background: var(--yellow); border-radius: 2px; width: 0%; pointer-events: none; }
+        .player-time { font-size: 0.75rem; color: rgba(250,247,240,0.4); font-variant-numeric: tabular-nums; white-space: nowrap; }
+        .upload-label { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.72rem; color: rgba(250,247,240,0.35); cursor: pointer; padding: 0.35rem 0.7rem; border: 1px dashed rgba(255,255,255,0.18); border-radius: 4px; transition: all var(--ease); }
+        .upload-label:hover { border-color: var(--yellow); color: var(--yellow); }
+        .upload-zone { border: 2px dashed rgba(255,255,255,0.15); border-radius: 8px; padding: 1.5rem; text-align: center; cursor: pointer; transition: all var(--ease); }
+        .upload-zone:hover { border-color: var(--yellow); background: rgba(244,200,66,0.04); }
+        .upload-zone-text { font-size: 0.82rem; color: rgba(250,247,240,0.45); line-height: 1.6; }
+        .upload-zone-text strong { color: var(--yellow); }
+        .generator-section { grid-column: 1 / -1; border-top: 1px solid rgba(255,255,255,0.07); padding-top: 3.5rem; }
+        .generator-section .project-col-title { margin-bottom: 0.6rem; }
+        .generator-section > p { color: rgba(250,247,240,0.55); margin-bottom: 2rem; font-size: 0.95rem; }
+        .gen-output { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-left: 4px solid var(--yellow); border-radius: 8px; padding: 2rem; min-height: 130px; margin-bottom: 1.5rem; }
+        .gen-output.spin { animation: blink 0.4s ease; }
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+        .gen-num { font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--yellow); margin-bottom: 0.4rem; }
+        .gen-concept { font-family: var(--font-display); font-size: 1.5rem; line-height: 1.3; margin-bottom: 0.6rem; }
+        .gen-desc { font-size: 0.88rem; color: rgba(250,247,240,0.55); line-height: 1.65; }
+        .btn-gen { background: var(--yellow); color: var(--dark); padding: 0.875rem 2rem; border-radius: 3px; font-weight: 700; font-size: 0.875rem; border: none; cursor: pointer; font-family: var(--font-body); transition: all var(--ease); }
+        .btn-gen:hover { background: #ddb400; transform: translateY(-2px); }
+        .gen-note { color: rgba(250,247,240,0.3); font-size: 0.78rem; margin-left: 1rem; }
+        .gen-meta { margin-bottom: 1.4rem; }
+        .gen-meta p { color: rgba(250,247,240,0.62); font-size:0.88rem; margin-bottom:0.55rem; line-height:1.65; }
+        .gen-dialogue { font-style:italic; color:rgba(250,247,240,0.88) !important; padding-left:1rem; border-left:3px solid var(--yellow); margin-left:0 !important; }
+        .gen-response { font-style:italic; color:rgba(250,247,240,0.38) !important; padding-left:1rem; }
+        .gen-inputs { display:flex; flex-direction:column; gap:0.6rem; margin-bottom:1.4rem; max-width:380px; }
+        .gen-input { padding:0.65rem 1rem; background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.14); border-radius:4px; color:var(--ink); font-family:var(--font-body); font-size:0.87rem; transition:all var(--ease); }
+        .gen-input::placeholder { color:rgba(250,247,240,0.26); }
+        .gen-input:focus { outline:none; border-color:var(--yellow); background:rgba(255,255,255,0.1); }
+
+        /* ── MONTE GAME ── */
+        .monte-section { grid-column: 1 / -1; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 3rem; margin-top: 2rem; }
+        .monte-section h3 { font-family: var(--font-display); font-size: 2rem; margin-bottom: 0.35rem; }
+        .monte-sub { color: var(--muted); margin-bottom: 0.75rem; font-size: 0.95rem; }
+        .monte-arena { position:relative; height:250px; max-width:540px; margin:1.5rem 0; }
+        .monte-slot { position:absolute; width:30%; height:100%; transition:left 0.32s cubic-bezier(0.4,0,0.2,1); }
+        .monte-inner { width:100%; height:100%; border-radius:10px; cursor:default; position:relative; overflow:hidden; }
+        .monte-inner.pickable { cursor:pointer; }
+        .monte-inner.pickable:hover .mc-front { filter:brightness(1.12); }
+        .mc-front { position:absolute; inset:0; border-radius:10px; overflow:hidden; background:linear-gradient(135deg,#2a2a3a,#1a1a28); z-index:2; transition: transform 0.55s cubic-bezier(0.2,0,0.1,1), filter 0.2s ease; }
+        .mc-front img { width:100%;height:100%;object-fit:cover;display:block; }
+        .mc-front.censored::after { content:''; position:absolute; top:18%;left:0;right:0;height:28%; background:#000; z-index:2; }
+        @keyframes peek { 0% { transform: translateY(0); } 30% { transform: translateY(-44%); } 70% { transform: translateY(-44%); } 100% { transform: translateY(0); } }
+        .mc-front.peeking { animation: peek 1.9s cubic-bezier(0.4,0,0.2,1) forwards; }
+        .mc-front.lifted { transform: translateY(-115%) !important; }
+        .mc-gordo { position:absolute; inset:0; z-index:1; border-radius:10px; overflow:hidden; opacity:0; transition:opacity 0.25s ease; pointer-events:none; }
+        .mc-gordo img { width:100%; height:100%; object-fit:cover; object-position: center 10%; display:block; }
+        .mc-gordo.show { opacity:1; }
+        .monte-msg { font-family:var(--font-display); font-size:1.5rem; font-weight:700; min-height:2rem; }
+        .monte-sub-msg { font-size:0.88rem; color:var(--muted); margin-top:0.25rem; min-height:1.4rem; }
+
+        /* ── SERVICES ── */
+        #services { background: var(--cream); }
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 1.25rem; }
+        .service-card { border: 2px solid var(--ink); border-radius: 8px; padding: 2rem; position: relative; cursor: pointer; overflow: hidden; background: var(--cream); }
+        .service-card::before { content: ''; position: absolute; inset: 0; background: var(--ink); transform: translateY(101%); transition: transform 0.38s cubic-bezier(0.4, 0, 0.2, 1); z-index: 0; }
+        .service-card:hover::before { transform: translateY(0); }
+        .service-card > * { position: relative; z-index: 1; }
+        .service-card:hover .svc-num, .service-card:hover .svc-title, .service-card:hover .svc-desc, .service-card:hover .svc-price { color: var(--cream); }
+        .service-card:hover .svc-tag { background: rgba(255,255,255,0.12); color: var(--cream); }
+        .service-card:hover .svc-sample { color: var(--yellow); }
+        .svc-num { font-size: 0.68rem; letter-spacing: 0.16em; color: var(--coral); font-weight: 700; margin-bottom: 1rem; transition: color var(--ease); }
+        .svc-title { font-family: var(--font-display); font-size: 1.45rem; font-weight: 700; margin-bottom: 0.65rem; line-height: 1.2; transition: color var(--ease); }
+        .svc-tag { display: inline-block; padding: 0.25rem 0.7rem; background: rgba(0,0,0,0.06); border-radius: 50px; font-size: 0.67rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.9rem; transition: all var(--ease); }
+        .svc-desc { font-size: 0.86rem; color: var(--muted); line-height: 1.62; margin-bottom: 1rem; transition: color var(--ease); }
+        .svc-price { font-size: 0.78rem; font-style: italic; color: rgba(232,228,217,0.35); margin-bottom: 1rem; transition: color var(--ease); }
+        .svc-sample { font-size: 0.78rem; font-weight: 700; color: var(--coral); background: none; border: none; cursor: pointer; padding: 0; font-family: var(--font-body); display: inline-flex; align-items: center; gap: 0.35rem; transition: color var(--ease), gap var(--ease); }
+        .svc-sample:hover { gap: 0.6rem; }
+
+        /* ── MODALS ── */
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.65); z-index: 1000; align-items: center; justify-content: center; padding: 2rem; backdrop-filter: blur(4px); }
+        .modal-overlay.open { display: flex; }
+        .modal { background: var(--cream); border-radius: 12px; padding: 2.5rem; max-width: 560px; width: 100%; max-height: 84vh; overflow-y: auto; position: relative; }
+        .modal.wide { max-width: 700px; }
+        .modal-x { position: absolute; top: 1.25rem; right: 1.25rem; background: none; border: none; cursor: pointer; font-size: 1.5rem; color: var(--muted); line-height: 1; }
+        .modal-x:hover { color: var(--ink); }
+        .modal-eyebrow { font-size: 0.68rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--coral); font-weight: 700; margin-bottom: 0.5rem; }
+        .modal-h { font-family: var(--font-display); font-size: 1.9rem; font-weight: 900; margin-bottom: 1.5rem; }
+        .modal-body { font-size: 0.93rem; line-height: 1.78; color: var(--ink); }
+        .modal-body p { margin-bottom: 1rem; }
+        .modal-body .footnote { font-size: 0.78rem; color: var(--muted); font-style: italic; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 1rem; margin-top: 0.5rem; }
+        .reading-body { font-family: Georgia, serif; font-size: 1rem; line-height: 1.85; color: var(--ink); }
+        .reading-body p { margin-bottom: 1.2rem; }
+
+        /* ── ABOUT / PHOTOS (Staggered Style 3) ── */
+        #about { background: #0A0A14; }
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: start;
+            overflow: visible;
+        }
+        .about-col-photos {
+            position: relative;
+            z-index: 2;
+        }
+        .about-col-text {
+            padding-top: 6rem;
+        }
+        .photo-strip {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: -5rem;
+        }
+        .photo-frame { border-radius: 6px; overflow: hidden; aspect-ratio: 3/4; position: relative; cursor: pointer; transition: transform var(--ease); }
+        .photo-frame:nth-child(1) { background: linear-gradient(135deg, #B8A9E3, #6fa3d4); }
+        .photo-frame:nth-child(2) { background: linear-gradient(135deg, #8FB89A, #3DBFAD); margin-top: 2rem; }
+        .photo-frame:nth-child(3) { background: linear-gradient(135deg, #F4C842, #E85D4A); }
+        .photo-frame:nth-child(4) { background: linear-gradient(135deg, #E85D4A, #B8A9E3); margin-top: 2rem; }
+        .photo-frame:hover { transform: scale(1.03) rotate(0.8deg); }
+        .photo-frame img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .about-text h2 { font-family: var(--font-display); font-size: clamp(2.5rem, 5vw, 3.5rem); font-weight: 900; line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 1.5rem; }
+        .about-text p { color: var(--muted); line-height: 1.75; margin-bottom: 1rem; font-size: 0.95rem; }
+        .about-links { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1.75rem; }
+        .about-link { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.82rem; font-weight: 700; color: var(--ink); text-decoration: none; padding: 0.45rem 1rem; border: 2px solid var(--ink); border-radius: 50px; transition: all var(--ease); }
+        .about-link:hover { background: var(--ink); color: var(--cream); }
+
+        /* ── GAME ── */
+        .game-section { grid-column: 1 / -1; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 3rem; margin-top: 8rem; }
+        .game-section h3 { font-family: var(--font-display); font-size: 2rem; margin-bottom: 0.4rem; }
+        .game-section .game-sub { color: var(--muted); margin-bottom: 2rem; font-size: 0.95rem; }
+        .game-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
+        .game-card-container { perspective: 1000px; }
+        .game-card { width: 100%; height: 230px; position: relative; transform-style: preserve-3d; transition: transform 0.55s ease; }
+        .game-card.flipped { transform: rotateY(180deg); }
+        .game-face { position: absolute; inset: 0; border-radius: 12px; padding: 2rem; display: flex; flex-direction: column; justify-content: center; backface-visibility: hidden; }
+        .game-front { background: var(--mid); color: var(--ink); }
+        .game-back { background: var(--surface); border: 2px solid rgba(232,228,217,0.15); transform: rotateY(180deg); }
+        .game-claim { font-family: var(--font-display); font-size: 1.3rem; line-height: 1.35; margin-bottom: 1.4rem; }
+        .game-btns { display: flex; gap: 0.75rem; }
+        .game-btn { padding: 0.55rem 1.4rem; border-radius: 50px; font-weight: 700; font-size: 0.85rem; cursor: pointer; background: transparent; font-family: var(--font-body); transition: all var(--ease); }
+        .game-btn.fact { border: 2px solid var(--teal); color: var(--teal); }
+        .game-btn.fact:hover { background: var(--teal); color: white; }
+        .game-btn.fiction { border: 2px solid var(--coral); color: var(--coral); }
+        .game-btn.fiction:hover { background: var(--coral); color: white; }
+        .result-emoji { font-size: 2.5rem; margin-bottom: 0.65rem; }
+        .result-head { font-family: var(--font-display); font-size: 1.2rem; font-weight: 700; margin-bottom: 0.4rem; }
+        .result-exp { font-size: 0.83rem; color: var(--muted); line-height: 1.55; }
+        .game-controls { margin-top: 1.25rem; display: flex; flex-direction: column; gap: 1rem; }
+        .game-score-row { font-size: 0.85rem; color: var(--muted); }
+        .game-score-row strong { color: var(--ink); }
+        .game-legend { font-size: 0.8rem; color: var(--muted); line-height: 1.6; }
+
+        /* ── CONTACT ── */
+        #contact { background: var(--coral); color: white; text-align: center; }
+        #contact .section-label { color: rgba(255,255,255,0.65); justify-content: center; }
+        #contact .section-label::before { background: rgba(255,255,255,0.65); }
+        #contact .section-title { color: white; font-size: clamp(3rem, 9vw, 6.5rem); }
+        #contact .section-deco-num { color: white; opacity: 0.07; }
+        .contact-sub { font-size: 1.2rem; color: rgba(255,255,255,0.82); max-width: 480px; margin: 0 auto 2.5rem; }
+        .contact-email { display: inline-block; font-family: var(--font-display); font-size: clamp(1.2rem, 2.5vw, 1.6rem); color: white; text-decoration: none; border-bottom: 3px solid rgba(255,255,255,0.45); padding-bottom: 3px; transition: border-color var(--ease); }
+        .contact-email:hover { border-color: white; }
+
+        /* ── FOOTER ── */
+        footer { background: var(--dark); color: rgba(232,228,217,0.35); padding: 2rem; text-align: center; font-size: 0.78rem; }
+        footer a { color: rgba(232,228,217,0.5); text-decoration: none; transition: color var(--ease); }
+        footer a:hover { color: var(--ink); }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 900px) {
+            #hero { grid-template-columns: 1fr; }
+            .hero-right { padding-top: 0; }
+            .project-grid { grid-template-columns: 1fr; gap: 3rem; }
+            .generator-section { grid-column: 1; }
+            .about-grid { grid-template-columns: 1fr; }
+            .about-col-text { padding-top: 0; }
+            .photo-strip { margin-bottom: 0; }
+            .game-wrap { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 640px) {
+            nav { padding: 1rem 1.25rem; }
+            .nav-links { gap: 1rem; }
+            .nav-links li:nth-child(n+4) { display: none; }
+            section { padding: 5rem 1.25rem; }
+            .work-grid { grid-template-columns: 1fr; }
+            .services-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════ NAV ═══════════════════════════════════ -->
+<nav id="nav">
+    <a href="#hero" class="nav-logo">DM</a>
+    <ul class="nav-links">
+        <li><a href="#work">Work</a></li>
+        <li><a href="#project">The Project</a></li>
+        <li><a href="#services">Hire Me</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#contact">Contact</a></li>
+    </ul>
+</nav>
+
+<!-- ═══════════════════════════════════ HERO ══════════════════════════════════ -->
+<section id="hero">
+    <div class="hero-left">
+        <div class="hero-eyebrow">Denver, CO</div>
+        <h1 class="hero-name">
+            <span>Dustin</span>
+            <span class="last">Mark.</span>
+        </h1>
+        <div class="hero-cta">
+            <a href="#work" class="btn btn-primary">Read the work</a>
+            <a href="#services" class="btn btn-secondary">Hire me for something</a>
+        </div>
+    </div>
+    <div class="hero-right">
+        <div class="hero-op-label">Currently operating as</div>
+        <span class="rotating-word" id="rotating-word">humor writer</span>
+        <div class="hero-avail">Available for hire, other things</div>
+    </div>
+    <div class="hero-scroll">Scroll</div>
+</section>
+
+<!-- ══════════════════════════════ PUBLISHED WORK ════════════════════════════ -->
+<section id="work">
+    <div class="container">
+        <div class="section-heading-wrap">
+            <span class="section-deco-num">01</span>
+            <div class="section-label">Published Work</div>
+            <h2 class="section-title">Words<br>on the web.</h2>
+            <p class="section-intro">Humor pieces, essays, and recurring columns that have appeared in publications ranging from prestigious to "it's still a publication."</p>
+        </div>
+
+        <div class="work-grid">
+            <div class="work-card fade-in">
+                <div class="work-card-accent" style="background:var(--coral)"></div>
+                <div class="work-card-body">
+                    <div class="work-pub" style="color:var(--coral)">McSweeney's Internet Tendency</div>
+                    <div class="work-title">"The Do's and Don'ts of Falling in Love"</div>
+                    <p class="work-desc">A structured guide to romantic catastrophe. Widely considered the definitive listicle on the subject by at least one person.</p>
+                    <div class="work-meta"><span>2014</span><a href="https://www.mcsweeneys.net" target="_blank" class="work-link" style="color:var(--coral)">Read it &rarr;</a></div>
+                </div>
+            </div>
+            <div class="work-card fade-in">
+                <div class="work-card-accent" style="background:var(--teal)"></div>
+                <div class="work-card-body">
+                    <div class="work-pub" style="color:var(--teal)">Slackjaw / Medium</div>
+                    <div class="work-title">"What Your Number of Pillows Says About You"</div>
+                    <p class="work-desc">A personality assessment framework based on pillow count. Later featured on the Drew Barrymore Show, which is a real thing that happened.</p>
+                    <div class="work-meta"><span>2018</span><a href="https://medium.com/@dsamuelmark" target="_blank" class="work-link" style="color:var(--teal)">Read it &rarr;</a></div>
+                </div>
+            </div>
+            <div class="work-card fade-in">
+                <div class="work-card-accent" style="background:var(--lavender)"></div>
+                <div class="work-card-body">
+                    <div class="work-pub" style="color:var(--lavender)">Medium</div>
+                    <div class="work-title">"Vibrator or Nickname of a Kid on My Son's Little League Team"</div>
+                    <p class="work-desc">A disambiguation piece. Linguistically rigorous. A triumph of form meeting function.</p>
+                    <div class="work-meta"><span>2021</span><a href="https://medium.com/@dsamuelmark" target="_blank" class="work-link" style="color:var(--lavender)">Read it &rarr;</a></div>
+                </div>
+            </div>
+            <div class="work-card fade-in">
+                <div class="work-card-accent" style="background:var(--yellow)"></div>
+                <div class="work-card-body">
+                    <div class="work-pub" style="color:var(--yellow)">Medium</div>
+                    <div class="work-title">"Jersey Mike's Last Chance"</div>
+                    <p class="work-desc">A long-form essay on self-mythology, personal narrative, and a sandwich chain. One of those is used metaphorically. Probably.</p>
+                    <div class="work-meta"><span>2022</span><a href="https://medium.com/@dsamuelmark" target="_blank" class="work-link" style="color:#a07a00">Read it &rarr;</a></div>
+                </div>
+            </div>
+            <div class="work-card fade-in">
+                <div class="work-card-accent" style="background:var(--sage)"></div>
+                <div class="work-card-body">
+                    <div class="work-pub" style="color:var(--sage)">Annual Column</div>
+                    <div class="work-title">"Every* Muscle in My Body"</div>
+                    <p class="work-desc">A recurring annual column, every year since 2019. The asterisk is doing significant structural work. Ongoing indefinitely, or until further notice.</p>
+                    <div class="work-meta"><span>2019&ndash;Present</span><a href="https://medium.com/@dsamuelmark" target="_blank" class="work-link" style="color:var(--sage)">Read it &rarr;</a></div>
+                </div>
+            </div>
+            <div class="work-card fade-in">
+                <div class="work-card-accent" style="background:var(--ink)"></div>
+                <div class="work-card-body">
+                    <div class="work-pub" style="color:var(--ink)">Medium</div>
+                    <div class="work-title">"At Long Last, I Deleted Twitter"</div>
+                    <p class="work-desc">A farewell essay. January 2025. Decisive. Unambiguous. Slightly overdue. The account is gone; the essay remains as evidence that it happened.</p>
+                    <div class="work-meta"><span>Jan 2025</span><a href="https://dsamuelmark.medium.com" target="_blank" class="work-link" style="color:var(--ink)">Read it &rarr;</a></div>
+                </div>
+            </div>
+            <div class="work-card fade-in">
+                <div class="work-card-accent" style="background:#c3a4e8"></div>
+                <div class="work-card-body">
+                    <div class="work-pub" style="color:var(--lavender)">Houston Community Newspapers</div>
+                    <div class="work-title">Staff Writer (2008&ndash;2011)</div>
+                    <p class="work-desc">Three years covering Houston-area news — predating the English degree, which was either aspirational or ironic depending on your perspective.</p>
+                    <div class="work-meta"><span>2008&ndash;2011</span><span>Print era</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ══════════════════════════ THE DUSTIN MARK PROJECT ═══════════════════════ -->
+<section id="project">
+    <div class="container">
+        <div class="section-heading-wrap">
+            <span class="section-deco-num">02</span>
+            <div class="section-label">Multimedia Universe</div>
+            <h2 class="section-title">The Dustin Mark<br>Project.</h2>
+            <p class="section-intro">Four narrative podcasts. Two self-published books. One fictional character who began as a massage therapy student, got cancelled, moved to a hostel, moved to Denmark, and died. Approximately one-third of the second book is in Danish.</p>
+        </div>
+        <div class="project-grid">
+            <div class="fade-in">
+                <div class="project-col-title">🎙 The Podcasts</div>
+                <div class="episode-list">
+                    <a class="episode-item active" href="https://open.spotify.com/show/3kWJ47mpl0szZw3LFPtiyK" target="_blank" style="text-decoration:none">
+                        <div class="ep-play">&#9654;</div>
+                        <div class="ep-info"><div class="ep-title">Dustin Mark: Massage Therapist (License Pending)</div><div class="ep-sub">A student shares wellness knowledge &mdash; until he doesn't</div></div>
+                        <div class="ep-tag">Vol. I</div>
+                    </a>
+                    <a class="episode-item" href="https://open.spotify.com/show/57CV13fPrMDQb4pmlwg120" target="_blank" style="text-decoration:none">
+                        <div class="ep-play">&#9654;</div>
+                        <div class="ep-info"><div class="ep-title">Dustin Mark: Canceled Massage Therapist</div><div class="ep-sub">Expelled, relocated to Las Vegas, Looking Out for Number 1</div></div>
+                        <div class="ep-tag">Vol. II</div>
+                    </a>
+                    <a class="episode-item" href="https://open.spotify.com/show/48vVJLnwFEF9AxYc1XlHgq" target="_blank" style="text-decoration:none">
+                        <div class="ep-play">&#9654;</div>
+                        <div class="ep-info"><div class="ep-title">Dustin Mark's Everything Club</div><div class="ep-sub">Reformed. Living in a hostel. Everything Is Poetry.</div></div>
+                        <div class="ep-tag">Vol. III</div>
+                    </a>
+                    <a class="episode-item" href="https://open.spotify.com/show/5gpDk98ySHgL4Cm30pO05t" target="_blank" style="text-decoration:none">
+                        <div class="ep-play">&#9654;</div>
+                        <div class="ep-info"><div class="ep-title">Dustin Mark Does Denmark</div><div class="ep-sub">Relocates to Aarhus. Falls in love. Dies.</div></div>
+                        <div class="ep-tag">Vol. IV</div>
+                    </a>
+                </div>
+                <a href="https://open.spotify.com/show/3kWJ47mpl0szZw3LFPtiyK" target="_blank" class="spotify-btn">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+                    Listen on Spotify
+                </a>
+            </div>
+            <div class="fade-in">
+                <div class="project-col-title">📚 The Books</div>
+                <div class="book-cards">
+                    <div class="book-card">
+                        <div class="book-cover b1">📖</div>
+                        <div class="book-info">
+                            <h4>The Dustin Mark Poems: 1&ndash;100</h4>
+                            <p>100 Poems That No Longer Need To Be Written. Composed during captivity in his uncle's basement — then polished after release.</p>
+                            <div class="book-actions">
+                                <a href="https://www.amazon.com/Dustin-Mark-Poems-Longer-Written/dp/B0D9MQTS6Z/" target="_blank" class="btn-ghost yellow">Buy on Amazon</a>
+                                <a href="https://open.spotify.com/show/70YMop8WYiyQRkg9MUmIUR" target="_blank" class="btn-ghost yellow">Audiobook</a>
+                                <button class="btn-ghost" onclick="openReadModal('book1')">Read Online</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="book-card">
+                        <div class="book-cover b2">📗</div>
+                        <div class="book-info">
+                            <h4>The Dustin Mark Poems: 101 &mdash; Death</h4>
+                            <p>A Posthumous Collection. Compiled by his sister and Danish friend Erik following his death. ~⅓ in Danish. This is not a translation.</p>
+                            <div class="book-actions">
+                                <a href="https://www.amazon.com/Dustin-Mark-Poems-Posthumous-Collection/dp/B0CPVP526Y/" target="_blank" class="btn-ghost yellow">Buy on Amazon</a>
+                                <button class="btn-ghost" onclick="openReadModal('book2')">Read Online</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="audiobook-player">
+                    <div class="ab-label">🎧 Audiobook &mdash; The Dustin Mark Poems: 1&ndash;100</div>
+                    <div style="margin-bottom:0.75rem">
+                        <a href="https://open.spotify.com/show/70YMop8WYiyQRkg9MUmIUR" target="_blank" class="spotify-btn" style="font-size:0.78rem; padding:0.5rem 1.1rem">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+                            Listen on Spotify
+                        </a>
+                    </div>
+                    <div class="player-track" id="player-track">Or upload a file to play below</div>
+                    <div class="player-controls">
+                        <button class="player-btn" id="btn-rw" title="Back 15s"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 .49-3.51"></path></svg></button>
+                        <button class="player-btn pp" id="btn-pp"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"></polygon></svg></button>
+                        <button class="player-btn" id="btn-ff" title="Forward 30s"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-.49-3.51"></path></svg></button>
+                        <div class="player-progress" id="progress-bar"><div class="player-fill" id="progress-fill"></div></div>
+                        <span class="player-time" id="player-time">0:00 / 0:00</span>
+                    </div>
+                    <label class="upload-label" for="audio-file"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg> Upload audio file</label>
+                    <input type="file" id="audio-file" accept="audio/*" style="display:none">
+                </div>
+                <div class="upload-zone" onclick="document.getElementById('book-file').click()">
+                    <div class="upload-zone-text">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="opacity:0.4; display:block; margin:0 auto 0.5rem"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                        <strong>Upload a book</strong> to make it readable in the browser<br>
+                        <small style="font-size:0.7rem; opacity:0.6">PDF or .txt &mdash; stored locally in your session</small>
+                    </div>
+                    <input type="file" id="book-file" accept=".txt,.pdf" style="display:none">
+                </div>
+            </div>
+            <div class="generator-section fade-in">
+                <div class="project-col-title">🎲 Your Own Project</div>
+                <div class="gen-meta">
+                    <p>Yes, it's needlessly confusing that the Dustin Mark in <em>The Dustin Mark Project</em> is not the Dustin Mark who created its contents.</p>
+                    <p class="gen-dialogue">'Wait, the Dustin Mark on the podcasts isn't the real Dustin Mark? Why didn't he just name the character something else?'</p>
+                    <p class="gen-response">'Yeah, I know.'</p>
+                    <p>None of it is real and identity is a construct. Would you like your own project like this &mdash; because it interests you, or just to be difficult?</p>
+                </div>
+                <div class="gen-inputs">
+                    <input type="text" id="gen-name" class="gen-input" placeholder="Your name">
+                    <input type="text" id="gen-start" class="gen-input" placeholder="Starting point (e.g. 'disgraced tax attorney')">
+                    <button class="btn-gen" onclick="generatePersonal()">Generate My Project</button>
+                </div>
+                <div class="gen-output" id="gen-output" style="display:none; padding:1.5rem; border-left-width:4px;"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ══════════════════════════════ SERVICES ══════════════════════════════════ -->
+<section id="services">
+    <div class="container">
+        <div class="section-heading-wrap">
+            <span class="section-deco-num">03</span>
+            <div class="section-label">Creative Services</div>
+            <h2 class="section-title">What I can<br>do for you.</h2>
+            <p class="section-intro">A comprehensive menu of creative services. All offered with full professionalism and a complete understanding that most of these inquiries won't pan out. That's okay.</p>
+        </div>
+        <div class="services-grid">
+            <div class="service-card fade-in"><div class="svc-num">01</div><div class="svc-title">Full-Time Employment</div><div class="svc-tag">Broad Ask</div><p class="svc-desc">Hire me as a real, salaried employee with benefits and everything. I will attend most meetings and occasionally have strong opinions about the subject line.</p><p class="svc-price">Pricing: Negotiable. Benefits appreciated. Snacks preferred.</p><button class="svc-sample" onclick="openSample('employment')">See sample work &rarr;</button></div>
+            <div class="service-card fade-in"><div class="svc-num">02</div><div class="svc-title">Feature Screenplay</div><div class="svc-tag">Long-Form</div><p class="svc-desc">A complete 95&ndash;115 page feature film script with actual three-act structure, character arcs, and scene descriptions that are technically correct.</p><p class="svc-price">Pricing: Let's talk. WGA rates are public information.</p><button class="svc-sample" onclick="openSample('screenplay')">See sample work &rarr;</button></div>
+            <div class="service-card fade-in"><div class="svc-num">03</div><div class="svc-title">Novel</div><div class="svc-tag">Long-Form</div><p class="svc-desc">80,000&ndash;100,000 words of literary fiction. Can accommodate most genres except one. Up to 33% may be in Danish.</p><p class="svc-price">Pricing: Significant. Worth it. Probably.</p><button class="svc-sample" onclick="openSample('novel')">See sample work &rarr;</button></div>
+            <div class="service-card fade-in"><div class="svc-num">04</div><div class="svc-title">Podcast Series</div><div class="svc-tag">Audio</div><p class="svc-desc">Narrative audio content from someone who has actually produced four narrative podcast series. I know things now I wish I'd known then.</p><p class="svc-price">Pricing: Per-episode or series rate available.</p><button class="svc-sample" onclick="openSample('podcast')">See sample work &rarr;</button></div>
+            <div class="service-card fade-in"><div class="svc-num">05</div><div class="svc-title">Greeting Card</div><div class="svc-tag">Short-Form ✦</div><p class="svc-desc">One (1) sentiment appropriate for a life event. Suitable for framing, gifting, or immediate recycling. Bulk orders welcome&mdash;pricing improves.</p><p class="svc-price">Pricing: Let's be honest, this one should be cheap.</p><button class="svc-sample" onclick="openSample('card')">See sample work &rarr;</button></div>
+            <div class="service-card fade-in"><div class="svc-num">06</div><div class="svc-title">Corporate Copy</div><div class="svc-tag">Commercial</div><p class="svc-desc">Marketing copy that will make your brand seem relatable, thoughtful, and vaguely aware of current events. Results guaranteed until scrutinized.</p><p class="svc-price">Pricing: Market rate plus the surcharge for caring.</p><button class="svc-sample" onclick="openSample('corporate')">See sample work &rarr;</button></div>
+            <div class="service-card fade-in"><div class="svc-num">07</div><div class="svc-title">Best Man / Toast</div><div class="svc-tag">Special Occasion</div><p class="svc-desc">7&ndash;10 minutes of remarks that will make the groom briefly regret asking, then deeply grateful. Ceremony-appropriate unless specified otherwise.</p><p class="svc-price">Pricing: Flat fee. Worth every dollar at the reception.</p><button class="svc-sample" onclick="openSample('toast')">See sample work &rarr;</button></div>
+            <div class="service-card fade-in"><div class="svc-num">08</div><div class="svc-title">Humor Consultation</div><div class="svc-tag">Advisory</div><p class="svc-desc">30 minutes during which I will tell you if something is funny. I will not be polite about it. Bring a thick skin and your best material.</p><p class="svc-price">Pricing: Hourly. I will not go over.</p><button class="svc-sample" onclick="openSample('consult')">See sample work &rarr;</button></div>
+            <div class="service-card fade-in"><div class="svc-num">09</div><div class="svc-title">Voiceover Work</div><div class="svc-tag">Audio</div><p class="svc-desc">A voice with four narrative podcasts behind it and a studio setup that sounds like a choice rather than a compromise. Deadpan available. Warmth also available.</p><p class="svc-price">Pricing: Rate card available. Demo on request.</p><button class="svc-sample" onclick="openSample('voiceover')">See sample work &rarr;</button></div>
+            <div class="service-card fade-in"><div class="svc-num">10</div><div class="svc-title">Eulogy</div><div class="svc-tag">Special Occasion ✦</div><p class="svc-desc">Remarks that honor the person while not being unbearable to sit through. If they were funny, I'll make that clear. If they weren't, I'll find something true.</p><p class="svc-price">Pricing: Sliding scale. Context-dependent.</p><button class="svc-sample" onclick="openSample('eulogy')">See sample work &rarr;</button></div>
+            <div class="service-card fade-in"><div class="svc-num">11</div><div class="svc-title">Children's Book</div><div class="svc-tag">Short-Form</div><p class="svc-desc">A picture book for children, written so the adult reading it out loud doesn't lose the will to live by page three. Age-appropriate throughout. Mostly.</p><p class="svc-price">Pricing: Reasonable. Rhymes cost more.</p><button class="svc-sample" onclick="openSample('childrens')">See sample work &rarr;</button></div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════ ABOUT / PHOTOS ════════════════════════════ -->
+<section id="about">
+    <div class="container">
+        <div class="about-grid">
+
+            <!-- Photo strip — normal vertical position, bleeds down -->
+            <div class="about-col-photos fade-in">
+                <div class="photo-strip">
+                    <div class="photo-frame" id="pf0"><img src="dmpic6.jpg" alt="Dustin Mark"></div>
+                    <div class="photo-frame" id="pf1"><img src="IMG_0021%202.jpeg" alt="Dustin Mark"></div>
+                    <div class="photo-frame" id="pf2"><img src="toga2.jpg" alt="Dustin Mark"></div>
+                    <div class="photo-frame" id="pf3"><img src="dmpic2.jpeg" alt="Dustin Mark"></div>
+                </div>
+            </div>
+
+            <!-- Bio text — starts 6rem lower than the photo column -->
+            <div class="about-col-text about-text fade-in">
+                <div class="section-heading-wrap" style="margin-bottom:2rem">
+                    <span class="section-deco-num" style="font-size:clamp(6rem,15vw,13rem); opacity:0.04">04</span>
+                    <h2 style="position:relative;z-index:1">The guy<br>behind the<br><em>words.</em></h2>
+                </div>
+                <p>Humor writer, editor, and multimedia creator with over 15 years of published comedy and conceptual work. Contributor to McSweeney's Internet Tendency and Slackjaw. Based in Denver, CO.</p>
+                <p>B.A. in English from the University of Texas at Austin 😉. Former Associate Editor at <em>Texas Travesty</em>, the collegiate humor publication. Current-ish assistant manager at a recreational sports facility &mdash; which, against all expectations, has prepared him for most of this.</p>
+                <p><em>The Dustin Mark Project</em> is an ongoing narrative multimedia work spanning four podcasts and two books, following a fictional character through an expanding set of personas.</p>
+                <div class="about-links">
+                    <a href="https://medium.com/@dsamuelmark" target="_blank" class="about-link">Medium &rarr;</a>
+                    <a href="https://open.spotify.com" target="_blank" class="about-link">Spotify &rarr;</a>
+                    <a href="mailto:dsamuelmark@gmail.com" class="about-link">Email &rarr;</a>
+                </div>
+            </div>
+
+            <!-- 3-Card Monte -->
+            <div class="monte-section fade-in">
+                <h3>Find Gordo.</h3>
+                <p class="monte-sub">Three photos of me. One dog hidden behind one of them. You have a third of a chance.</p>
+                <div class="monte-arena" id="monte-arena">
+                    <div class="monte-slot" id="ms-0" style="left:0%"><div class="monte-inner" id="mc-0" onclick="pickCard(0)"><div class="mc-face mc-front" id="mcf-0"><span style="font-size:2rem;opacity:.15">?</span></div><div class="mc-face mc-back">&#183; &#183; &#183;</div><div class="mc-gordo" id="mcg-0">🐕</div></div></div>
+                    <div class="monte-slot" id="ms-1" style="left:35%"><div class="monte-inner" id="mc-1" onclick="pickCard(1)"><div class="mc-face mc-front" id="mcf-1"><span style="font-size:2rem;opacity:.15">?</span></div><div class="mc-face mc-back">&#183; &#183; &#183;</div><div class="mc-gordo" id="mcg-1">🐕</div></div></div>
+                    <div class="monte-slot" id="ms-2" style="left:70%"><div class="monte-inner" id="mc-2" onclick="pickCard(2)"><div class="mc-face mc-front" id="mcf-2"><span style="font-size:2rem;opacity:.15">?</span></div><div class="mc-face mc-back">&#183; &#183; &#183;</div><div class="mc-gordo" id="mcg-2">🐕</div></div></div>
+                </div>
+                <div class="monte-msg" id="monte-msg"></div>
+                <div class="monte-sub-msg" id="monte-sub-msg"></div>
+                <button class="btn btn-secondary" id="monte-start" style="display:none;margin-top:1rem;padding:0.6rem 1.5rem;font-size:0.85rem" onclick="startMonte()">Start game</button>
+                <button class="btn btn-secondary" id="monte-restart" style="display:none;margin-top:1rem;padding:0.6rem 1.5rem;font-size:0.85rem" onclick="startMonte()">Play again</button>
+            </div>
+
+            <!-- Fact or Fiction Game -->
+            <div class="game-section fade-in">
+                <h3>Fact or Fiction?</h3>
+                <p class="game-sub">Think you know Dustin? Prove it.</p>
+                <div class="game-wrap">
+                    <div>
+                        <div class="game-card-container">
+                            <div class="game-card" id="game-card">
+                                <div class="game-face game-front"><div class="game-claim" id="game-claim">Loading&hellip;</div><div class="game-btns"><button class="game-btn fact" onclick="guess(true)">&#10003; Fact</button><button class="game-btn fiction" onclick="guess(false)">&#10007; Fiction</button></div></div>
+                                <div class="game-face game-back" id="game-back"><div class="result-emoji" id="result-emoji">🎉</div><div class="result-head" id="result-head">Correct!</div><div class="result-exp" id="result-exp"></div></div>
+                            </div>
+                        </div>
+                        <div class="game-controls">
+                            <button class="btn btn-secondary" id="game-next" onclick="nextQ()" style="display:none; padding:0.6rem 1.4rem; font-size:0.85rem;">Next &rarr;</button>
+                            <div class="game-score-row">Score: <strong id="sc-right">0</strong> / <strong id="sc-total">0</strong></div>
+                        </div>
+                    </div>
+                    <div class="game-legend" style="align-self:center; color:#666;">
+                        <p style="font-family: var(--font-display); font-size:1.2rem; font-weight:700; margin-bottom:0.75rem; color:var(--ink);">How well do<br>you know Dustin?</p>
+                        <p style="margin-bottom:1rem;">Each card presents a claim about Dustin. Getting them right still doesn't mean you know him.</p>
+                        <p style="font-size:0.75rem; color:#aaa;">12 questions &middot; Shuffled each session</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════ CONTACT ══════════════════════════════════ -->
+<section id="contact">
+    <div class="container">
+        <div class="section-heading-wrap" style="text-align:center">
+            <span class="section-deco-num" style="left:50%;transform:translateX(-50%)">05</span>
+            <div class="section-label" style="justify-content:center">Get in touch</div>
+            <h2 class="section-title">Let's make<br>something.</h2>
+            <p class="contact-sub">Interested in hiring me for something reasonable, or unreasonable? Either works.</p>
+        </div>
+        <div><a href="mailto:dsamuelmark@gmail.com" class="contact-email">dsamuelmark@gmail.com</a></div>
+    </div>
+</section>
+
+<!-- ══════════════════════════════ FOOTER ════════════════════════════════════ -->
+<footer>
+    <p>&copy; 2025 Dustin Mark &middot; Denver, CO &middot; <a href="https://medium.com/@dsamuelmark" target="_blank">Medium</a> &middot; <a href="https://open.spotify.com" target="_blank">Spotify</a> &middot; <a href="mailto:dsamuelmark@gmail.com">Email</a></p>
+    <p style="margin-top:0.4rem; font-size:0.68rem; opacity:0.6">Twitter deleted January 2025. There's an essay about it.</p>
+</footer>
+
+<!-- ═══════════════════════════════ MODALS ════════════════════════════════════ -->
+<div class="modal-overlay" id="sample-overlay" onclick="closeOverlay(event, 'sample-overlay')">
+    <div class="modal"><button class="modal-x" onclick="closeModal('sample-overlay')">&times;</button><div class="modal-eyebrow" id="s-eyebrow">Sample Work</div><div class="modal-h" id="s-title">Title</div><div class="modal-body" id="s-body"></div></div>
+</div>
+<div class="modal-overlay" id="read-overlay" onclick="closeOverlay(event, 'read-overlay')">
+    <div class="modal wide"><button class="modal-x" onclick="closeModal('read-overlay')">&times;</button><div class="modal-eyebrow">The Dustin Mark Project</div><div class="modal-h" id="r-title">Book</div><div class="reading-body" id="r-body"></div></div>
+</div>
+<audio id="audio" style="display:none"></audio>
+
+<!-- ════════════════════════════════ SCRIPTS ══════════════════════════════════ -->
+<script>
+window.addEventListener('scroll', () => {
+    document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 40);
+});
+
+const WORDS = [
+    'humor writer','humor writer','humor writer',
+    'McSweeney\'s contributor','McSweeney\'s contributor','McSweeney\'s contributor',
+    'podcast auteur','podcast auteur','podcast auteur',
+    'multimedia creator','multimedia creator','multimedia creator',
+    'greeting card philosopher','greeting card philosopher',
+    'man of many personas','man of many personas',
+    'Denver-based writer','Denver-based writer',
+    'Slackjaw contributor','Slackjaw contributor',
+    'comedy writer','comedy writer',
+    'your next full-time employee',
+    'reluctant Dane',
+    'chronicler of muscle groups',
+    'current-ish assistant manager',
+    'licensed massage therapist (pending)',
+    'canceled massage therapist (looking out for number 1)',
+    'Everything Club founder',
+    'posthumous poet (by proxy)',
+    'not the Dustin Mark you may be thinking of',
+    'the one who made the project, not the one in it',
+    'former Las Vegas cynic',
+    'hostel resident & poker player (briefly)',
+    'man who deleted Twitter (January 2025)',
+    'author of a book you can read in one language',
+    'person with strong opinions about pillows',
+    'theoretically knowledgeable about massage',
+    'Alberte\'s friend',
+    'Aarhus alumnus',
+    'Texas Travesty alumnus',
+    'occasional recreational soccer administrator',
+    'available for projects',
+    'not currently in Denmark',
+];
+let wi = 0;
+const wordEl = document.getElementById('rotating-word');
+setInterval(() => {
+    wordEl.style.opacity = '0';
+    setTimeout(() => { wi = (wi + 1) % WORDS.length; wordEl.textContent = WORDS[wi]; wordEl.style.opacity = '1'; }, 280);
+}, 2600);
+
+const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+
+document.querySelectorAll('.episode-item').forEach(item => {
+    item.addEventListener('click', () => {
+        document.querySelectorAll('.episode-item').forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+    });
+});
+
+const P_S1=['(License Pending)','(Probably Fine)','(Going Great)','(No Red Flags Yet)','(Starting Strong)','(So Far So Good)'];
+const P_S2=['(Looking Out for Number 1)','(Just Asking Questions)','(Everything\'s Fine)','(A Fresh Start, Actually)','(Moving On)','(Not What It Looks Like)'];
+const P_C3=['Everything Is Poetry','Everything Is Fine, Actually','Finding the Thread','Something to Say','A New Chapter','The Next Phase'];
+const P_PLACE=['Denmark','Portugal','a small town in Wales','the Pacific Northwest','somewhere quieter','rural France','Iceland','Aarhus'];
+const P_TYPE=['Poems','Manifestos','Observations','Essays','Works','Texts','Notes','Thoughts'];
+const P_QUAL=['No Longer Need to Be Written','Have Been Written','Exist Now','Speak for Themselves','Are Done','Stand on Their Own'];
+function pick(arr) { return arr[~~(Math.random()*arr.length)]; }
+function generatePersonal() {
+    const name=document.getElementById('gen-name').value.trim()||'Your Name';
+    const start=document.getElementById('gen-start').value.trim()||'aspiring something';
+    const s1=pick(P_S1),s2=pick(P_S2),c3=pick(P_C3),loc=pick(P_PLACE),wt=pick(P_TYPE),wq=pick(P_QUAL);
+    const n=50+~~(Math.random()*80);
+    const out=document.getElementById('gen-output');
+    out.innerHTML=`<div style="font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;color:var(--yellow);margin-bottom:1rem">Your multimedia universe:</div><div style="display:flex;flex-direction:column;gap:.75rem;margin-bottom:1.25rem">${gi('Podcast I',`${name}: ${start} ${s1}`,`An earnest ${start} shares expertise with guests. The series ends due to personal controversy.`)}${gi('Podcast II',`${name}: Canceled ${start} ${s2}`,`After the incident, ${name} relocates and adopts a cynical persona. Solicits listener support. Things escalate.`)}${gi('Podcast III',`${name}'s Everything Club (${c3})`,`Reformed. Possibly living in a hostel. Explores beauty in everyday life while supporting themselves through unclear means.`)}${gi('Podcast IV',`${name} Does ${loc}`,`Relocates abroad to learn the language and start fresh. Falls in love, probably. Dies.`)}</div><div style="display:flex;flex-direction:column;gap:.75rem">${gi('Book I',`The ${name} ${wt}: 1\u2013${n}: ${n} ${wt} That ${wq}`,`Written during a period of confinement. Self-published. Available on Amazon.`,true)}${gi('Book II',`The ${name} ${wt}: ${n+1}\u2013Death: A Posthumous Collection`,`Compiled by a sibling and a foreign friend. Approximately one-third in the language of ${loc}. This is not a translation.`,true)}</div>`;
+    out.style.display='block'; out.classList.add('spin'); setTimeout(()=>out.classList.remove('spin'),400);
+}
+function gi(num,title,desc,book=false){const col=book?'var(--lavender)':'var(--yellow)';return`<div style="background:rgba(255,255,255,.04);border-left:3px solid ${col};padding:.7rem 1rem;border-radius:0 4px 4px 0"><div style="font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(250,247,240,.32);margin-bottom:.2rem">${num}</div><div style="font-family:var(--font-display);font-size:.97rem;margin-bottom:.22rem">${title}</div><div style="font-size:.76rem;color:rgba(250,247,240,.42);line-height:1.55">${desc}</div></div>`;}
+
+const audio=document.getElementById('audio');
+let playing=false;
+document.getElementById('audio-file').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;audio.src=URL.createObjectURL(f);document.getElementById('player-track').textContent=f.name.replace(/\.[^/.]+$/,'');playing=false;syncPlayBtn();});
+document.getElementById('btn-pp').addEventListener('click',()=>{if(!audio.src)return;playing?audio.pause():audio.play();playing=!playing;syncPlayBtn();});
+document.getElementById('btn-rw').addEventListener('click',()=>{audio.currentTime=Math.max(0,audio.currentTime-15);});
+document.getElementById('btn-ff').addEventListener('click',()=>{audio.currentTime=Math.min(audio.duration||0,audio.currentTime+30);});
+audio.addEventListener('timeupdate',()=>{if(!audio.duration)return;document.getElementById('progress-fill').style.width=(audio.currentTime/audio.duration*100)+'%';document.getElementById('player-time').textContent=fmt(audio.currentTime)+' / '+fmt(audio.duration);});
+audio.addEventListener('ended',()=>{playing=false;syncPlayBtn();});
+document.getElementById('progress-bar').addEventListener('click',function(e){if(!audio.duration)return;const r=this.getBoundingClientRect();audio.currentTime=((e.clientX-r.left)/r.width)*audio.duration;});
+function syncPlayBtn(){document.getElementById('btn-pp').innerHTML=playing?'<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>':'<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>';}
+function fmt(s){if(isNaN(s))return'0:00';return`${~~(s/60)}:${String(~~(s%60)).padStart(2,'0')}`;}
+
+document.getElementById('book-file').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;if(f.name.endsWith('.txt')){const r=new FileReader();r.onload=ev=>openReadModalContent(f.name.replace(/\.[^/.]+$/,''),ev.target.result);r.readAsText(f);}else{alert('PDF in-browser reading coming soon.');}});
+
+const ALL_PHOTOS=['dmpic1.jpg','dmpic2.jpeg','dmpic3.jpg','dmpic4.jpeg','dmpic5.jpg','dmpic6.jpg','dmpic7.jpg','dmpic8.jpg','dmpic9.jpg','dmpic10.jpg','dmpic11.jpg','dmpic12.jpg','dmpic13.jpg','dmpic14.png','dmpic15.jpg','winepic.jpg','toga2.jpg','mayatdms.png','IMG_6124.jpeg','IMG_0790.jpeg','IMG_0021%202.jpeg','IMG_0578%202.jpeg','69671260933__1EA51096-212B-4A9D-A1C3-1ED981E63A6C.jpeg'];
+let montePhotos=[];
+function pickMontePhotos(){const pool=[...ALL_PHOTOS];for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]];}montePhotos=pool.slice(0,3);}
+function renderMontePhotos(){for(let i=0;i<3;i++){const front=document.getElementById('mcf-'+i);front.innerHTML=`<img src="${montePhotos[i]}" alt="">`;censored?front.classList.add('censored'):front.classList.remove('censored');document.getElementById('mcg-'+i).innerHTML=`<img src="gordo1.jpeg" alt="Gordo">`;}}
+document.addEventListener('DOMContentLoaded',()=>{document.getElementById('monte-start').style.display='inline-block';pickMontePhotos();renderMontePhotos();});
+
+let monteState='idle',gordoSlot=0,slotPos=[0,1,2],censored=false;
+const LEFTS=['0%','35%','70%'];
+function applySlotPos(){for(let i=0;i<3;i++)document.getElementById('ms-'+i).style.left=LEFTS[slotPos[i]];}
+function startMonte(){if(monteState!=='idle')return;monteState='peek';gordoSlot=~~(Math.random()*3);slotPos=[0,1,2];pickMontePhotos();renderMontePhotos();applySlotPos();for(let i=0;i<3;i++){document.getElementById('mc-'+i).classList.remove('pickable');document.getElementById('mcf-'+i).classList.remove('lifted','peeking');document.getElementById('mcg-'+i).classList.remove('show');}document.getElementById('monte-msg').textContent='Watch closely\u2026';document.getElementById('monte-sub-msg').textContent='';document.getElementById('monte-restart').style.display='none';document.getElementById('monte-start').style.display='none';setTimeout(()=>{document.getElementById('mcg-'+gordoSlot).classList.add('show');document.getElementById('mcf-'+gordoSlot).classList.add('peeking');setTimeout(()=>{document.getElementById('mcf-'+gordoSlot).classList.remove('peeking');document.getElementById('mcg-'+gordoSlot).classList.remove('show');setTimeout(doShuffle,420);},1900);},600);}
+function doShuffle(){monteState='shuffling';document.getElementById('monte-msg').textContent='';const n=5+~~(Math.random()*4);let delay=0;for(let s=0;s<n;s++){delay+=Math.max(190,340-s*18);setTimeout(()=>{const a=~~(Math.random()*3);let b;do{b=~~(Math.random()*3);}while(b===a);const iA=slotPos.indexOf(a),iB=slotPos.indexOf(b);[slotPos[iA],slotPos[iB]]=[slotPos[iB],slotPos[iA]];applySlotPos();},delay);}setTimeout(()=>{monteState='picking';for(let i=0;i<3;i++)document.getElementById('mc-'+i).classList.add('pickable');document.getElementById('monte-msg').textContent='Where\'s Gordo?';},delay+220);}
+function pickCard(slotIdx){if(monteState!=='picking')return;monteState='revealed';for(let i=0;i<3;i++)document.getElementById('mc-'+i).classList.remove('pickable');setTimeout(()=>document.getElementById('mcf-0').classList.add('lifted'),0);setTimeout(()=>document.getElementById('mcf-1').classList.add('lifted'),140);setTimeout(()=>document.getElementById('mcf-2').classList.add('lifted'),280);const won=slotIdx===gordoSlot;setTimeout(()=>{document.getElementById('mcg-'+gordoSlot).classList.add('show');if(won){document.getElementById('monte-msg').textContent='🎉 Found Gordo!';document.getElementById('monte-sub-msg').textContent='Impressive. The face-blackout was narrowly avoided.';censored=false;}else{document.getElementById('monte-msg').textContent='😬 Gordo eludes you.';document.getElementById('monte-sub-msg').textContent='Your photos will be redacted until you win.';censored=true;}renderMontePhotos();document.getElementById('monte-restart').style.display='inline-block';monteState='idle';},700);}
+
+const SAMPLES={employment:{eyebrow:'Service 01',title:'Full-Time Employment',body:`<p><em>Sample: Relevant professional experience, presented honestly.</em></p><p><strong>What you get:</strong> A person with 15+ years of professional writing experience who will show up — physically or virtually — and produce good work. Strong opinions about clarity. Decent in meetings. Will not require extensive managing with clear direction and reasonable timelines.</p><p><strong>Soft skills:</strong> Writing, editing, tone calibration, ideation, explaining why something isn't funny (diplomatically), and an above-average ability to make the company newsletter not feel like a company newsletter.</p><p><strong>Previous experience includes:</strong> Editorial oversight, staff writing, content strategy (adjacent), and managing a recreational soccer facility — which, against all expectations, prepared me for most professional environments.</p><p class="footnote">This is not a joke. Well, it's a little bit of a joke. The email is real.</p>`},screenplay:{eyebrow:'Service 02',title:'Feature Screenplay',body:`<p><em>Sample excerpt — INT. JERSEY MIKE'S — NIGHT</em></p><p>DEREK (40s, formerly hopeful) sits in the last booth. The restaurant is technically closed. He's been here since 4. The EMPLOYEE (23, tired) has stopped pretending to mop.</p><p><strong>DEREK</strong><br>I'm not leaving until I finish this.</p><p><strong>EMPLOYEE</strong><br>The sub?</p><p><strong>DEREK</strong><br>(long pause)<br>The sub.</p><p><em>He eats. Something shifts. He will not be the same man who entered this Jersey Mike's. None of us will be.</em></p><p class="footnote">Full-length scripts available upon request.</p>`},novel:{eyebrow:'Service 03',title:'Novel',body:`<p><em>Sample — Opening paragraph, Chapter One:</em></p><p>The thing about starting over is that it implies you had a clear starting point to begin with, which most people don't. What they have is a middle — a long, textured middle that they've been calling their life — and one day they look up from it and decide, for reasons that will take them another hundred pages to articulate, that this is where the beginning goes.</p><p><em>Sample — Chapter Seven (Danish section):</em></p><p>Han vidste ikke, hvad han ledte efter. Men han vidste, at det ikke var her.</p><p><em>(Translation: "He didn't know what he was looking for. But he knew it wasn't here.")</em></p><p class="footnote">The Danish content is intentional and thematically justified.</p>`},podcast:{eyebrow:'Service 04',title:'Podcast Series',body:`<p><em>Sample — Series premise document excerpt:</em></p><p><strong>The Show:</strong> A narrative audio series following one character through a specific, self-contained chapter of their life. Not a mystery. Not true crime. Something smaller and stranger.</p><p><strong>Episode 1 opens on:</strong> A man explaining himself to someone who has not asked for an explanation. This will take six episodes to resolve.</p><p><strong>Tone:</strong> Specific. Deadpan at altitude. Warm but not sentimental.</p><p class="footnote">Four produced series available to stream. Sample episodes on request.</p>`},card:{eyebrow:'Service 05',title:'Greeting Card',body:`<p><em>Sample cards — selected occasions:</em></p><p><strong>Birthday (adult):</strong><br><em>"Another year of not dying. That's the goal, and you're nailing it."</em></p><p><strong>Sympathy:</strong><br><em>"There's nothing to say, and I've said it. I'm here anyway."</em></p><p><strong>Retirement:</strong><br><em>"Congratulations on being done. I'll let you know how the rest of it goes."</em></p><p><strong>Wedding:</strong><br><em>"The odds are better than people say. You picked well. I saw the seating chart."</em></p><p class="footnote">Custom occasions welcomed. Hallmark has not responded to my submissions.</p>`},corporate:{eyebrow:'Service 06',title:'Corporate Copy',body:`<p><em>Sample taglines — illustrative purposes only:</em></p><p><strong>Tech Startup:</strong><br><em>"We're solving a problem you didn't know you had, for an amount you'll reconsider."</em></p><p><strong>Wellness Brand:</strong><br><em>"You're already doing great. This will make it measurable."</em></p><p><strong>B2B SaaS:</strong><br><em>"Enterprise-grade. Human-scale. Available immediately."</em></p><p class="footnote">The samples above are jokes. The actual work is not. Unless the brand calls for it.</p>`},toast:{eyebrow:'Service 07',title:'Best Man / Toast',body:`<p><em>Sample — Opening of a best man speech:</em></p><p>I've known [GROOM] for [X] years, and in that time I've watched him grow into exactly the kind of person who would ask me to speak at his wedding despite knowing what I'm capable of.</p><p>That's either love or a failure of judgment, and based on what I've seen from him over the years, I'd say it's both — and that's exactly why this works.</p><p class="footnote">Full speeches tailored to the couple, occasion, and audience's pain tolerance.</p>`},consult:{eyebrow:'Service 08',title:'Humor Consultation',body:`<p><em>How it works:</em></p><p>You send the material in advance. We get on a call. I've read it before we start so we don't waste time. I tell you what's working, what isn't, and why — specifically, with examples, without hedging.</p><p><strong>What I won't do:</strong> Tell you it's funny when it isn't.</p><p><strong>What I will do:</strong> Give you a clear read, in plain language, from someone who has been doing this long enough to know the difference between "not working yet" and "not working."</p><p class="footnote">One hour, flat rate. I will not go over.</p>`},voiceover:{eyebrow:'Service 09',title:'Voiceover Work',body:`<p><em>What exists as evidence:</em></p><p>Four narrative podcast series, fully written and recorded. The voice is deadpan at baseline, warm when the material calls for it, and does not go wobbly mid-sentence regardless of content.</p><p><strong>Appropriate for:</strong> Audiobooks, explainer videos, documentary narration, trailers, ads that want to sound like a person made them.</p><p class="footnote">Demo reel available on request.</p>`},eulogy:{eyebrow:'Service 10',title:'Eulogy',body:`<p><em>Sample — opening of a eulogy for someone funny:</em></p><p>[NAME] would have hated this. Not the people — the people he loved. Not the flowers — he had no opinion on flowers. The part he would have hated is that everyone is being so sincere about it. He found sincerity deeply suspicious, which is ironic, because he was the most genuinely sincere person I've ever known. He just didn't want anyone to notice.</p><p class="footnote">Written with care. One revision included. I will ask you questions about the person before I write a word.</p>`},childrens:{eyebrow:'Service 11',title:"Children's Book",body:`<p><em>Sample — page one of an unwritten picture book:</em></p><p>Gerald did not want to go to the party.<br>"I don't want to go," said Gerald.<br>"I know," said his mother.<br>They went to the party.</p><p><em>Page seven:</em></p><p>Gerald had a fine time at the party.<br>He did not admit this.<br>His mother already knew.</p><p>— <em>THE END</em> —</p><p class="footnote">Fully written, illustrated direction provided. Does not include illustrations.</p>`}};
+
+function openSample(key){const s=SAMPLES[key];document.getElementById('s-eyebrow').textContent=s.eyebrow;document.getElementById('s-title').textContent=s.title;document.getElementById('s-body').innerHTML=s.body;document.getElementById('sample-overlay').classList.add('open');document.body.style.overflow='hidden';}
+const BOOK_CONTENT={book1:{title:'Book One',body:`<p>This is where the full text of <em>Book One</em> would appear. Upload your book file using the upload section in the Project area to display the complete text here.</p><p><em>A placeholder — upload your content and it will render here.</em></p>`},book2:{title:'Book Two',body:`<p>This is where the full text of <em>Book Two</em> would appear. Note that approximately one-third of this volume is written in Danish.</p><p>Han vidste ikke, hvad han ledte efter. Men han vidste, at det ikke var her.</p><p><em>A placeholder — upload your content and it will render here.</em></p>`}};
+function openReadModal(book){const c=BOOK_CONTENT[book];document.getElementById('r-title').textContent=c.title;document.getElementById('r-body').innerHTML=c.body;document.getElementById('read-overlay').classList.add('open');document.body.style.overflow='hidden';}
+function openReadModalContent(name,text){document.getElementById('r-title').textContent=name;document.getElementById('r-body').innerHTML=text.split(/\n\n+/).map(p=>`<p>${p.trim().replace(/\n/g,'<br>')}</p>`).join('');document.getElementById('read-overlay').classList.add('open');document.body.style.overflow='hidden';}
+function closeModal(id){document.getElementById(id).classList.remove('open');document.body.style.overflow='';}
+function closeOverlay(e,id){if(e.target===e.currentTarget)closeModal(id);}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){document.querySelectorAll('.modal-overlay.open').forEach(m=>m.classList.remove('open'));document.body.style.overflow='';}});
+
+const QUESTIONS=[{claim:"The Louisiana Purchase in 1803 roughly doubled the size of the United States.",fact:true,exp:"True. Napoleon sold the territory for about $15 million — roughly 3 cents per acre. A deal."},{claim:"Thomas Jefferson was the second President of the United States.",fact:false,exp:"Fiction. Jefferson was third. John Adams was second. Washington was first."},{claim:"Alaska was purchased from Canada in 1867.",fact:false,exp:"Fiction. Alaska was purchased from Russia for $7.2 million. Canada was not involved."},{claim:"The 19th Amendment, ratified in 1920, gave women the right to vote.",fact:true,exp:"True. It took 144 years after the country's founding to get there."},{claim:"Neil Armstrong was the first American in space.",fact:false,exp:"Fiction. Alan Shepard was first American in space, May 1961. Armstrong was first on the moon."},{claim:"Abraham Lincoln belonged to the Republican Party.",fact:true,exp:"True. He was the first Republican president, elected 1860."},{claim:"Hawaii was the 50th — and last — state admitted to the Union.",fact:true,exp:"True. Alaska was 49th, Hawaii 50th. Both joined in 1959."},{claim:"Benjamin Franklin served as President of the United States.",fact:false,exp:"Fiction. Franklin never became president, despite the $100 bill."},{claim:"The Civil War ended in 1865.",fact:true,exp:"True. Lee surrendered to Grant at Appomattox Court House on April 9, 1865."},{claim:"The Declaration of Independence was adopted on July 4, 1776.",fact:true,exp:"True. Though most of the actual signing happened August 2nd."},{claim:"The Statue of Liberty was a gift from Mexico.",fact:false,exp:"Fiction. It was a gift from France, dedicated October 28, 1886."},{claim:"The Manhattan Project was the codename for the U.S. nuclear weapons program in WWII.",fact:true,exp:"True. It ran 1942–1946, employed 130,000 people, cost ~$2 billion."},{claim:"Dustin worked as a staff writer at a Houston-area newspaper.",fact:true,exp:"True. Houston Community Newspapers, 2008–2011. A formative era."},{claim:"Dustin is a two-time Webby Award winner.",fact:false,exp:"Fiction. He is not. He would like to be."},{claim:"One of his pieces is titled 'Vibrator or Nickname of a Kid on My Son's Little League Team.'",fact:true,exp:"Completely true. Published 2021. A disambiguation piece."},{claim:"Dustin has a black belt in Brazilian jiu-jitsu.",fact:false,exp:"Fiction. He managed a recreational soccer facility. Different skill set."},{claim:"Dustin was an Associate Editor at a collegiate humor publication.",fact:true,exp:"True. Texas Travesty at UT Austin."}];
+let pool=[],qIndex=0,correct=0,total=0,answered=false;
+function shuffle(arr){return[...arr].sort(()=>Math.random()-0.5);}
+function initGame(){pool=shuffle(QUESTIONS);qIndex=0;correct=0;total=0;answered=false;showQ();}
+function showQ(){const q=pool[qIndex%pool.length];document.getElementById('game-claim').textContent=q.claim;document.getElementById('game-card').classList.remove('flipped');document.getElementById('game-next').style.display='none';answered=false;}
+function guess(isFact){if(answered)return;answered=true;total++;const q=pool[qIndex%pool.length];const right=isFact===q.fact;if(right)correct++;document.getElementById('result-emoji').textContent=right?'🎉':'😬';document.getElementById('result-head').textContent=right?'Correct!':'Wrong!';document.getElementById('result-exp').textContent=q.exp;document.getElementById('game-card').classList.add('flipped');document.getElementById('game-next').style.display='inline-block';document.getElementById('sc-right').textContent=correct;document.getElementById('sc-total').textContent=total;}
+function nextQ(){qIndex++;showQ();}
+initGame();
+</script>
+</body>
+</html>

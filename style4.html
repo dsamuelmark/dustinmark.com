@@ -1,0 +1,2408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dustin Mark — Writer, Creator, Occasional Human</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu+Condensed&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/mammoth@1.8.0/mammoth.browser.min.js"></script>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --cream: #0F0F17;
+            --ink: #E8E4D9;
+            --coral: #FF5C47;
+            --yellow: #EDD93A;
+            --teal: #50D9C4;
+            --lavender: #C4B8F5;
+            --sage: #9FCBAA;
+            --dark: #07070F;
+            --mid: #1A1A2A;
+            --surface: #1C1C2C;
+            --muted: rgba(232,228,217,0.5);
+            --font-display: 'Ubuntu Condensed', Arial Narrow, sans-serif;
+            --font-body: 'Ubuntu', system-ui, sans-serif;
+            --ease: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --rail: 68px;
+        }
+
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: var(--font-body);
+            background: var(--cream);
+            color: var(--ink);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* ── LEFT RAIL NAV ── */
+        .left-rail {
+            position: fixed;
+            top: 0; left: 0;
+            width: var(--rail);
+            height: 100vh;
+            z-index: 200;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1.75rem 0 1.75rem;
+            border-right: 1px solid rgba(232,228,217,0.07);
+            background: rgba(15,15,23,0.97);
+            backdrop-filter: blur(12px);
+        }
+        .rail-logo {
+            font-family: var(--font-display);
+            font-weight: 900;
+            font-size: 1rem;
+            color: var(--coral);
+            text-decoration: none;
+            letter-spacing: -0.01em;
+            margin-bottom: auto;
+        }
+        .rail-links {
+            display: flex;
+            flex-direction: column;
+            gap: 2.6rem;
+            align-items: flex-start;
+            margin-bottom: auto;
+            padding-left: 2.2rem;
+            overflow: visible;
+        }
+        .rail-links a {
+            transform: rotate(45deg);
+            transform-origin: left center;
+            font-size: 0.8rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            font-weight: 700;
+            color: rgba(232,228,217,0.28);
+            text-decoration: none;
+            transition: color var(--ease);
+            white-space: nowrap;
+            display: block;
+        }
+        .rail-links a:hover { color: var(--ink); }
+        .rail-links a.active { color: var(--coral); }
+        .rail-status {
+            width: 5px; height: 5px;
+            border-radius: 50%;
+            background: var(--coral);
+            box-shadow: 0 0 10px var(--coral);
+            animation: railPulse 2.4s ease-in-out infinite;
+        }
+        @keyframes railPulse { 0%,100%{opacity:1;} 50%{opacity:0.25;} }
+
+        /* ── SITE CONTENT ── */
+        .site-content { margin-left: var(--rail); }
+
+        /* ── HERO ── */
+        #hero {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            position: relative;
+        }
+        .hero-left {
+            padding: 3rem 3rem 4rem 4rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border-right: 1px solid rgba(232,228,217,0.06);
+            position: relative;
+        }
+        .hero-eyebrow-row {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: 0.65rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: rgba(232,228,217,0.32);
+            font-weight: 700;
+        }
+        .hero-eyebrow-row .dot { color: var(--coral); }
+        .hero-eyebrow-row .avail { color: var(--coral); }
+        .hero-name-block {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding-bottom: 0.5rem;
+        }
+        .hero-name {
+            font-family: var(--font-display);
+            font-size: clamp(6rem, 16vw, 14rem);
+            font-weight: 900;
+            line-height: 0.84;
+            letter-spacing: -0.04em;
+            color: var(--ink);
+        }
+        .hero-name .last {
+            color: var(--coral);
+            font-style: italic;
+            display: block;
+        }
+        .hero-bottom-strip {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(232,228,217,0.07);
+            margin-top: 2rem;
+        }
+        .hero-city {
+            font-size: 0.65rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: rgba(232,228,217,0.3);
+            font-weight: 600;
+        }
+        .hero-scroll-hint {
+            font-size: 0.6rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: rgba(232,228,217,0.2);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .hero-scroll-hint::after {
+            content: '';
+            display: inline-block;
+            width: 28px; height: 1px;
+            background: rgba(232,228,217,0.2);
+        }
+
+        .hero-right {
+            padding: 3rem 3.5rem 4rem 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+        .hero-op-label {
+            font-size: 0.62rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: rgba(232,228,217,0.3);
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+        .rotating-word {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 4.5vw, 4rem);
+            font-weight: 900;
+            color: var(--ink);
+            letter-spacing: -0.025em;
+            line-height: 1.1;
+            display: block;
+            margin-bottom: 0.5rem;
+            transition: opacity 0.28s ease;
+            border-left: 3px solid var(--coral);
+            padding-left: 1rem;
+        }
+        .hero-cta {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-top: 3rem;
+        }
+        .hero-coord {
+            font-size: 0.6rem;
+            letter-spacing: 0.1em;
+            color: rgba(232,228,217,0.18);
+            margin-top: auto;
+            padding-top: 2rem;
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* ── BUTTONS ── */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            padding: 0 1.75rem;
+            height: 46px;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+            font-family: var(--font-body);
+            font-size: 0.82rem;
+            font-weight: 700;
+            text-decoration: none;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-primary {
+            background: var(--coral);
+            border: 1px solid var(--coral);
+            color: white;
+        }
+        .btn-primary:hover { background: #e04a36; }
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid rgba(232,228,217,0.2);
+            color: var(--ink);
+        }
+        .btn-secondary:hover { border-color: rgba(232,228,217,0.5); background: rgba(232,228,217,0.04); }
+
+        /* Eyes on hero CTAs */
+        .hero-cta .btn { overflow: hidden; transition: padding-left 0.35s ease, background 0.2s ease; }
+        .hero-cta .btn::before {
+            content: '';
+            position: absolute;
+            left: 0.7rem;
+            top: 50%;
+            transform: translateY(-50%) scaleX(0);
+            transform-origin: left center;
+            width: 40px; height: 24px;
+            background: url('dmpic1.jpg') center 22% / 360% auto no-repeat;
+            border-radius: 3px;
+            opacity: 0;
+            transition: opacity 0.32s ease, transform 0.32s ease;
+            pointer-events: none;
+        }
+        .hero-cta .btn:hover::before { opacity: 1; transform: translateY(-50%) scaleX(1); }
+        .hero-cta .btn:hover { padding-left: 3.4rem; }
+
+        /* ── FADE-IN ── */
+        .fade-in { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+        /* ── SECTION SHARED ── */
+        .section-label {
+            font-size: 0.65rem;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--coral);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+        .section-label::before {
+            content: '';
+            display: inline-block;
+            width: 1.5rem; height: 2px;
+            background: var(--coral);
+            flex-shrink: 0;
+        }
+        .section-title {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 5.5vw, 4.5rem);
+            font-weight: 900;
+            line-height: 0.93;
+            letter-spacing: -0.03em;
+            margin-bottom: 1.5rem;
+        }
+        .section-intro {
+            font-size: 0.92rem;
+            color: var(--muted);
+            line-height: 1.72;
+            max-width: 420px;
+        }
+
+        /* ── WORK — HORIZONTAL SCROLL ── */
+        #work {
+            background: #0c0c1a;
+            border-top: 1px solid rgba(232,228,217,0.11);
+        }
+        .work-header {
+            padding: 5rem 4rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+        }
+        .work-header-left { max-width: 500px; }
+        .work-header-right {
+            font-size: 0.65rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: rgba(232,228,217,0.2);
+            text-align: right;
+            white-space: nowrap;
+            padding-bottom: 0.25rem;
+        }
+        .work-header-right span { display: block; color: rgba(232,228,217,0.1); margin-top: 0.3rem; }
+
+        .work-scroll-track {
+            display: flex;
+            overflow-x: auto;
+            overflow-y: hidden;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(232,228,217,0.1) transparent;
+            cursor: grab;
+            user-select: none;
+        }
+        .work-scroll-track:active { cursor: grabbing; }
+        .work-scroll-track::-webkit-scrollbar { height: 3px; }
+        .work-scroll-track::-webkit-scrollbar-track { background: transparent; }
+        .work-scroll-track::-webkit-scrollbar-thumb { background: rgba(232,228,217,0.12); border-radius: 2px; }
+
+        .work-card-h {
+            flex-shrink: 0;
+            width: 360px;
+            min-height: 340px;
+            padding: 2.5rem 2.75rem;
+            border-right: 1px solid rgba(232,228,217,0.07);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            text-decoration: none;
+            color: var(--ink);
+            transition: background var(--ease);
+            position: relative;
+        }
+        .work-card-h:first-child { border-left: none; }
+        .work-card-h::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 2px;
+            background: var(--coral);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.35s ease;
+        }
+        .work-card-h:hover { background: rgba(232,228,217,0.025); }
+        .work-card-h:hover::after { transform: scaleX(1); }
+        .work-card-h:hover .wch-title { color: var(--coral); }
+
+        .wch-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem; }
+        .wch-num {
+            font-family: var(--font-display);
+            font-size: 0.7rem;
+            color: rgba(232,228,217,0.22);
+            font-weight: 700;
+            letter-spacing: 0.06em;
+        }
+        .wch-pub {
+            font-size: 0.6rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+        .wch-title {
+            font-family: var(--font-display);
+            font-size: clamp(1.3rem, 2vw, 1.7rem);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.15;
+            margin-bottom: 1rem;
+            transition: color var(--ease);
+        }
+        .wch-desc {
+            font-size: 0.78rem;
+            color: var(--muted);
+            line-height: 1.6;
+            flex: 1;
+        }
+        .wch-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(232,228,217,0.06);
+        }
+        .wch-year {
+            font-size: 0.65rem;
+            color: rgba(232,228,217,0.2);
+            letter-spacing: 0.06em;
+        }
+        .wch-arrow {
+            font-size: 0.75rem;
+            color: rgba(232,228,217,0.15);
+            transition: color var(--ease), transform var(--ease);
+        }
+        .work-card-h:hover .wch-arrow { color: var(--coral); transform: translateX(4px); }
+
+        /* End cap */
+        .work-end-cap {
+            flex-shrink: 0;
+            width: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            border-right: 1px solid rgba(232,228,217,0.07);
+        }
+        .work-end-cap span {
+            writing-mode: vertical-rl;
+            transform: rotate(180deg);
+            font-size: 0.6rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: rgba(232,228,217,0.12);
+        }
+        .work-more-link {
+            writing-mode: vertical-rl;
+            transform: rotate(180deg);
+            font-size: 0.68rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--coral);
+            text-decoration: none;
+            margin-top: 1rem;
+            transition: opacity var(--ease);
+        }
+        .work-more-link:hover { opacity: 0.7; }
+
+        /* ── PROJECT ── */
+        #project { background: var(--dark); color: rgba(232,228,217,0.75); padding: 7rem 4rem; border-top: 1px solid rgba(232,228,217,0.11); }
+        #project .section-label { color: var(--yellow); }
+        #project .section-label::before { background: var(--yellow); }
+        #project .section-title { color: rgba(232,228,217,0.22); }
+        #project .section-intro { color: rgba(250,247,240,0.65); margin-bottom: 4rem; }
+        .project-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; }
+        .project-col-title { font-family: var(--font-display); font-size: 1.6rem; color: var(--yellow); margin-bottom: 1.5rem; }
+        .episode-list { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 2rem; }
+        .episode-item {
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.09);
+            border-radius: 6px; padding: 0.9rem 1.1rem;
+            display: flex; align-items: center; gap: 1rem;
+            cursor: pointer; transition: background var(--ease), border-color var(--ease);
+            text-decoration: none;
+        }
+        .episode-item:hover, .episode-item.active { background: rgba(244,200,66,0.12); border-color: rgba(244,200,66,0.4); }
+
+        .ep-info { flex: 1; }
+        .ep-title { font-weight: 600; font-size: 0.875rem; color: rgba(232,228,217,0.9); }
+        .ep-sub { font-size: 0.72rem; color: rgba(250,247,240,0.45); margin-top: 0.15rem; }
+        .ep-tag { font-size: 0.72rem; color: rgba(250,247,240,0.4); white-space: nowrap; }
+        .spotify-btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.7rem 1.4rem; background: #1DB954; color: white; border-radius: 50px; text-decoration: none; font-weight: 700; font-size: 0.85rem; transition: all var(--ease); }
+        .spotify-btn:hover { background: #19a349; transform: scale(1.03); }
+        .book-cards { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 1.5rem; }
+        .book-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.09); border-radius: 8px; padding: 1.2rem; display: flex; gap: 1.2rem; align-items: center; transition: background var(--ease); }
+        .book-card:hover { background: rgba(255,255,255,0.09); }
+        .book-cover { width: 66px; height: 94px; border-radius: 4px; flex-shrink: 0; overflow: hidden; }
+        .book-cover img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
+        .ep-play { width: 44px; height: 44px; border-radius: 6px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; position: relative; overflow: hidden; background: rgba(255,255,255,0.08); }
+        .ep-play img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; }
+        .ep-play span { position: relative; z-index: 1; color: white; font-size: 0.7rem; background: rgba(0,0,0,0.45); border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; padding-left: 2px; }
+        .ab-cover { width: 88px; height: 88px; border-radius: 6px; object-fit: cover; object-position: center; flex-shrink: 0; display: block; margin-bottom: 0.85rem; }
+        .book-info h4 { font-family: var(--font-display); font-size: 1.05rem; margin-bottom: 0.35rem; }
+        .book-info p { font-size: 0.78rem; color: rgba(250,247,240,0.55); line-height: 1.5; margin-bottom: 0.7rem; }
+        .book-actions { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+        .btn-ghost { padding: 0.35rem 0.9rem; border: 1px solid rgba(255,255,255,0.25); border-radius: 3px; color: var(--cream); text-decoration: none; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.05em; transition: all var(--ease); cursor: pointer; background: transparent; font-family: var(--font-body); }
+        .btn-ghost:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.5); }
+        .btn-ghost.yellow { border-color: var(--yellow); color: var(--yellow); }
+        .btn-ghost.yellow:hover { background: rgba(244,200,66,0.12); }
+        .audiobook-player { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 1.4rem; margin-bottom: 1rem; }
+        .ab-label { font-size: 0.68rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--yellow); margin-bottom: 0.6rem; }
+        .player-track { font-family: var(--font-display); font-size: 1.1rem; margin-bottom: 1.1rem; color: rgba(250,247,240,0.8); }
+        .player-controls { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem; }
+        .player-btn { background: none; border: none; color: var(--cream); cursor: pointer; padding: 0.4rem; border-radius: 50%; transition: background var(--ease), color var(--ease); display: flex; align-items: center; }
+        .player-btn:hover { background: rgba(255,255,255,0.1); color: var(--yellow); }
+        .player-btn.pp { width: 44px; height: 44px; background: var(--yellow); color: var(--dark); }
+        .player-btn.pp:hover { background: #ddb400; color: var(--dark); }
+        .player-progress { flex: 1; height: 4px; background: rgba(255,255,255,0.12); border-radius: 2px; cursor: pointer; position: relative; }
+        .player-fill { height: 100%; background: var(--yellow); border-radius: 2px; width: 0%; pointer-events: none; }
+        .player-time { font-size: 0.75rem; color: rgba(250,247,240,0.4); font-variant-numeric: tabular-nums; white-space: nowrap; }
+        .upload-label { display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.72rem; color: rgba(250,247,240,0.35); cursor: pointer; padding: 0.35rem 0.7rem; border: 1px dashed rgba(255,255,255,0.18); border-radius: 4px; transition: all var(--ease); }
+        .upload-label:hover { border-color: var(--yellow); color: var(--yellow); }
+        .upload-zone { border: 2px dashed rgba(255,255,255,0.15); border-radius: 8px; padding: 1.5rem; text-align: center; cursor: pointer; transition: all var(--ease); }
+        .upload-zone:hover { border-color: var(--yellow); background: rgba(244,200,66,0.04); }
+        .upload-zone-text { font-size: 0.82rem; color: rgba(250,247,240,0.45); line-height: 1.6; }
+        .upload-zone-text strong { color: var(--yellow); }
+        .generator-section { grid-column: 1 / -1; border-top: 1px solid rgba(255,255,255,0.07); padding-top: 3.5rem; }
+        .generator-section .project-col-title { margin-bottom: 0.6rem; }
+        .generator-section > p { color: rgba(250,247,240,0.55); margin-bottom: 2rem; font-size: 0.95rem; }
+        .gen-output { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-left: 4px solid var(--yellow); border-radius: 8px; padding: 2rem; min-height: 130px; margin-bottom: 1.5rem; }
+        .gen-output.spin { animation: blink 0.4s ease; }
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+        .gen-num { font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--yellow); margin-bottom: 0.4rem; }
+        .gen-concept { font-family: var(--font-display); font-size: 1.5rem; line-height: 1.3; margin-bottom: 0.6rem; }
+        .gen-desc { font-size: 0.88rem; color: rgba(250,247,240,0.55); line-height: 1.65; }
+        .btn-gen { background: var(--yellow); color: var(--dark); padding: 0.875rem 2rem; border-radius: 3px; font-weight: 700; font-size: 0.875rem; border: none; cursor: pointer; font-family: var(--font-body); transition: all var(--ease); }
+        .btn-gen:hover { background: #ddb400; transform: translateY(-2px); }
+        .gen-note { color: rgba(250,247,240,0.3); font-size: 0.78rem; margin-left: 1rem; }
+        .gen-meta { margin-bottom: 1.4rem; }
+        .gen-meta p { color: rgba(250,247,240,0.62); font-size: 0.88rem; margin-bottom: 0.55rem; line-height: 1.65; }
+        .gen-dialogue { font-style: italic; color: rgba(250,247,240,0.88) !important; padding-left: 1rem; border-left: 3px solid var(--yellow); }
+        .gen-response { font-style: italic; color: rgba(250,247,240,0.38) !important; padding-left: 1rem; }
+        .gen-inputs { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1.4rem; max-width: 380px; }
+        .gen-input { padding: 0.65rem 1rem; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.14); border-radius: 4px; color: var(--cream); font-family: var(--font-body); font-size: 0.87rem; transition: all var(--ease); }
+        .gen-input::placeholder { color: rgba(250,247,240,0.26); }
+        .gen-input:focus { outline: none; border-color: var(--yellow); background: rgba(255,255,255,0.1); }
+        .monte-section { grid-column: 1 / -1; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 3rem; margin-top: 2rem; }
+        .monte-section h3 { font-family: var(--font-display); font-size: 2rem; margin-bottom: 0.35rem; }
+        .monte-sub { color: var(--muted); margin-bottom: 0.75rem; font-size: 0.95rem; }
+        .monte-notice { font-size: 0.85rem; color: rgba(232,228,217,0.3); font-style: italic; }
+        .monte-arena { position: relative; height: 420px; max-width: 660px; margin: 2rem 0 3rem; }
+        .monte-slot { position: absolute; width: 32%; height: 100%; transition: left 0.38s cubic-bezier(0.4,0,0.2,1); }
+
+        .monte-inner {
+            width: 100%; height: 100%;
+            cursor: default; position: relative; overflow: visible;
+        }
+        .monte-inner.pickable { cursor: pointer; }
+        .monte-inner.pickable:hover .mc-cup-img { filter: brightness(1.1); }
+
+        /* ── cup image — the actual PNG, fills the slot ── */
+        .mc-cup-img {
+            position: absolute;
+            bottom: 0; left: 50%;
+            transform: translateX(-50%);
+            width: 100%; height: 100%;
+            object-fit: contain;
+            object-position: center bottom;
+            z-index: 2;
+            transition: opacity 0.2s ease, filter 0.2s ease;
+            filter: drop-shadow(0 6px 16px rgba(0,0,0,0.55));
+            pointer-events: none;
+        }
+        /* tilt image replaces front image during peek/reveal */
+        .mc-cup-tilt {
+            position: absolute;
+            bottom: 0; left: 50%;
+            transform: translateX(-50%);
+            width: 120%; height: 120%;
+            object-fit: contain;
+            object-position: center bottom;
+            z-index: 2;
+            opacity: 0;
+            transition: opacity 0.25s ease;
+            filter: drop-shadow(0 6px 16px rgba(0,0,0,0.55));
+            pointer-events: none;
+        }
+        .mc-cup-tilt.show { opacity: 1; }
+        .mc-cup-img.hide   { opacity: 0; }
+
+        /* ── mc-front: invisible click target + polaroid host ── */
+        .mc-front {
+            position: absolute; inset: 0;
+            z-index: 3;
+            background: none;
+        }
+        .mc-front::before { display: none; }
+
+        /* taped polaroid photo — sits over the cup body */
+        .mc-front img {
+            position: absolute;
+            width: 68%; height: 52%;
+            object-fit: cover; object-position: center top;
+            top: 56%; left: 50%;
+            transform: translateX(-50%) rotate(-2deg);
+            border: 4px solid #f2ede3;
+            border-bottom-width: 14px;
+            box-shadow: 2px 4px 12px rgba(0,0,0,0.55);
+            z-index: 4;
+        }
+        /* tape strip */
+        .mc-tape {
+            position: absolute;
+            width: 28%; height: 9px;
+            top: calc(56% - 5px); left: 50%;
+            transform: translateX(-50%) rotate(-1deg);
+            background: rgba(220,210,180,0.6);
+            border-left: 1px solid rgba(180,170,140,0.3);
+            border-right: 1px solid rgba(180,170,140,0.3);
+            z-index: 5;
+        }
+        .mc-front.censored::after { content: ''; position: absolute; top: 56%; left: 8%; right: 8%; height: 40%; background: #111; z-index: 8; }
+
+        /* ── Gordo ball — sits at the base, revealed when cup tilts ── */
+        .mc-gordo {
+            position: absolute;
+            width: 82px; height: 82px;
+            border-radius: 50%;
+            bottom: 6px; left: 50%;
+            transform: translateX(-50%);
+            z-index: 1; opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none; overflow: hidden;
+            box-shadow: 0 5px 18px rgba(0,0,0,0.7);
+            border: 2px solid rgba(255,255,255,0.15);
+        }
+        .mc-gordo::after {
+            content: ''; position: absolute; inset: 0; border-radius: 50%;
+            background: radial-gradient(circle at 36% 28%, rgba(255,255,255,0.32) 0%, transparent 52%);
+            z-index: 3; pointer-events: none;
+        }
+        .mc-gordo img { width: 100%; height: 100%; object-fit: cover; object-position: center 12%; display: block; transform: scale(1.6); transform-origin: center 16%; }
+        .mc-gordo.show { opacity: 1; }
+        .monte-msg { font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; min-height: 2rem; }
+        .monte-sub-msg { font-size: 0.88rem; color: var(--muted); margin-top: 0.25rem; min-height: 1.4rem; }
+
+        /* ── SERVICES — SPLIT SCROLL ── */
+        #services { padding: 0; background: #13131f; border-top: 1px solid rgba(232,228,217,0.11); }
+        .services-split {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            min-height: 100vh;
+        }
+        .services-sticky {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            padding: 5rem 2.5rem 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border-right: 1px solid rgba(232,228,217,0.07);
+            background: #13131f;
+        }
+        .services-sticky .section-intro { margin-top: 1.5rem; font-size: 0.85rem; max-width: none; }
+        .services-sticky-footer {
+            margin-top: auto;
+            padding-top: 2rem;
+            font-size: 0.6rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: rgba(232,228,217,0.15);
+        }
+        .services-scroll {
+            padding: 4rem 3rem 6rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 1px;
+            background: rgba(232,228,217,0.09);
+            align-content: start;
+        }
+        .service-card {
+            background: #13131f;
+            padding: 2rem;
+            position: relative;
+            cursor: pointer;
+            overflow: hidden;
+        }
+        .service-card::before {
+            content: '';
+            position: absolute; inset: 0;
+            background: var(--ink);
+            transform: translateY(101%);
+            transition: transform 0.38s cubic-bezier(0.4,0,0.2,1);
+            z-index: 0;
+        }
+        .service-card:hover::before { transform: translateY(0); }
+        .service-card > * { position: relative; z-index: 1; }
+        .service-card:hover .svc-num,
+        .service-card:hover .svc-title,
+        .service-card:hover .svc-desc,
+        .service-card:hover .svc-price { color: var(--cream); }
+        .service-card:hover .svc-tag { background: rgba(255,255,255,0.12); color: var(--cream); }
+        .service-card:hover .svc-sample { color: var(--yellow); }
+        .svc-num { font-size: 0.68rem; letter-spacing: 0.16em; color: var(--coral); font-weight: 700; margin-bottom: 1rem; transition: color var(--ease); }
+        .svc-title { font-family: var(--font-display); font-size: 1.4rem; font-weight: 700; margin-bottom: 0.65rem; line-height: 1.2; transition: color var(--ease); }
+        .svc-tag { display: inline-block; padding: 0.25rem 0.7rem; background: rgba(0,0,0,0.06); border-radius: 50px; font-size: 0.67rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.9rem; transition: all var(--ease); }
+        .svc-desc { font-size: 0.84rem; color: var(--muted); line-height: 1.62; margin-bottom: 1rem; transition: color var(--ease); }
+        .svc-price { font-size: 0.78rem; font-style: italic; color: rgba(232,228,217,0.35); margin-bottom: 1rem; transition: color var(--ease); }
+        .svc-sample { font-size: 0.78rem; font-weight: 700; color: var(--coral); background: none; border: none; cursor: pointer; padding: 0; font-family: var(--font-body); display: inline-flex; align-items: center; gap: 0.35rem; transition: color var(--ease), gap var(--ease); }
+        .svc-sample:hover { gap: 0.6rem; }
+
+        /* ── ABOUT — SPLIT SCROLL ── */
+        #about { padding: 0; background: #09091a; border-top: 1px solid rgba(232,228,217,0.11); }
+        .about-split {
+            display: grid;
+            grid-template-columns: 380px 1fr;
+            min-height: 100vh;
+        }
+        .about-sticky {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow: hidden;
+            border-right: 1px solid rgba(232,228,217,0.06);
+        }
+        .about-sticky-inner {
+            padding: 4rem 2.5rem;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        .about-sticky-label {
+            font-size: 0.62rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--coral);
+            font-weight: 700;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .about-sticky-label::before { content: ''; display: inline-block; width: 1.5rem; height: 2px; background: var(--coral); }
+        .photo-strip {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            flex: 1;
+        }
+        .photo-frame {
+            border-radius: 5px;
+            overflow: hidden;
+            aspect-ratio: 3/4;
+            position: relative;
+            cursor: pointer;
+            transition: transform var(--ease);
+        }
+        .photo-frame:nth-child(1) { background: linear-gradient(135deg, #B8A9E3, #6fa3d4); }
+        .photo-frame:nth-child(2) { background: linear-gradient(135deg, #8FB89A, #3DBFAD); margin-top: 1.5rem; }
+        .photo-frame:nth-child(3) { background: linear-gradient(135deg, #F4C842, #E85D4A); }
+        .photo-frame:nth-child(4) { background: linear-gradient(135deg, #E85D4A, #B8A9E3); margin-top: 1.5rem; }
+        .photo-frame:hover { transform: scale(1.03) rotate(0.6deg); }
+        .photo-placeholder { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; color: rgba(255,255,255,0.65); font-size: 0.7rem; letter-spacing: 0.08em; text-align: center; padding: 1rem; gap: 0.4rem; }
+        .photo-placeholder svg { opacity: 0.5; }
+        .photo-frame img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .photo-upload-row { margin-top: 0.85rem; display: flex; gap: 0.4rem; flex-wrap: wrap; }
+        .pu-label { font-size: 0.7rem; color: var(--muted); cursor: pointer; padding: 0.35rem 0.7rem; border: 1px dashed rgba(232,228,217,0.2); border-radius: 4px; transition: all var(--ease); }
+        .pu-label:hover { border-color: var(--coral); color: var(--coral); }
+
+        .about-scroll {
+            padding: 5rem 4rem 7rem;
+            color: var(--ink);
+        }
+        .about-text h2 { font-family: var(--font-display); font-size: clamp(2.5rem, 4.5vw, 3.5rem); font-weight: 900; line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 1.5rem; }
+        .about-text p { color: var(--muted); line-height: 1.75; margin-bottom: 1rem; font-size: 0.95rem; }
+        .about-links { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1.75rem; }
+        .about-link { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.82rem; font-weight: 700; color: var(--ink); text-decoration: none; padding: 0.45rem 1rem; border: 2px solid rgba(232,228,217,0.2); border-radius: 3px; transition: all var(--ease); }
+        .about-link:hover { background: var(--ink); color: var(--cream); border-color: var(--ink); }
+        .game-section { border-top: 1px solid rgba(255,255,255,0.08); padding-top: 3rem; margin-top: 4rem; }
+        .game-section h3 { font-family: var(--font-display); font-size: 2rem; margin-bottom: 0.4rem; }
+        .game-section .game-sub { color: var(--muted); margin-bottom: 2rem; font-size: 0.95rem; }
+        .game-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
+        .game-card-container { perspective: 1000px; }
+        .game-card { width: 100%; height: 230px; position: relative; transform-style: preserve-3d; transition: transform 0.55s ease; }
+        .game-card.flipped { transform: rotateY(180deg); }
+        .game-face { position: absolute; inset: 0; border-radius: 12px; padding: 2rem; display: flex; flex-direction: column; justify-content: center; backface-visibility: hidden; }
+        .game-front { background: var(--mid); color: var(--ink); }
+        .game-back { background: var(--surface); border: 2px solid rgba(232,228,217,0.15); transform: rotateY(180deg); }
+        .game-claim { font-family: var(--font-display); font-size: 1.3rem; line-height: 1.35; margin-bottom: 1.4rem; }
+        .game-btns { display: flex; gap: 0.75rem; }
+        .game-btn { padding: 0.55rem 1.4rem; border-radius: 50px; font-weight: 700; font-size: 0.85rem; cursor: pointer; background: transparent; font-family: var(--font-body); transition: all var(--ease); }
+        .game-btn.fact { border: 2px solid var(--teal); color: var(--teal); }
+        .game-btn.fact:hover { background: var(--teal); color: white; }
+        .game-btn.fiction { border: 2px solid var(--coral); color: var(--coral); }
+        .game-btn.fiction:hover { background: var(--coral); color: white; }
+        .result-emoji { font-size: 2.5rem; margin-bottom: 0.65rem; }
+        .result-head { font-family: var(--font-display); font-size: 1.2rem; font-weight: 700; margin-bottom: 0.4rem; }
+        .result-exp { font-size: 0.83rem; color: var(--muted); line-height: 1.55; }
+        .game-controls { margin-top: 1.25rem; display: flex; flex-direction: column; gap: 1rem; }
+        .game-score-row { font-size: 0.85rem; color: var(--muted); }
+        .game-score-row strong { color: var(--ink); }
+        .game-legend { font-size: 0.8rem; color: var(--muted); line-height: 1.6; }
+
+        /* ── CONTACT ── */
+        #contact {
+            background: var(--coral);
+            color: white;
+            padding: 8rem 4rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+        .contact-left .section-label { color: rgba(255,255,255,0.6); }
+        .contact-left .section-label::before { background: rgba(255,255,255,0.6); }
+        .contact-left .section-title { color: white; font-size: clamp(3rem, 7vw, 5.5rem); }
+        .contact-right { display: flex; flex-direction: column; gap: 1rem; }
+        .contact-sub { font-size: 1rem; color: rgba(255,255,255,0.75); max-width: 380px; line-height: 1.7; }
+        .contact-email { display: inline-block; font-family: var(--font-display); font-size: clamp(1rem, 2vw, 1.4rem); color: white; text-decoration: none; border-bottom: 2px solid rgba(255,255,255,0.4); padding-bottom: 3px; transition: border-color var(--ease); }
+        .contact-email:hover { border-color: white; }
+
+        /* ── NEWSLETTER ── */
+        #newsletter {
+            background: var(--mid);
+            padding: 5rem 4rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 0.5rem;
+        }
+        .newsletter-label { font-family: var(--font-display); font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--teal); margin-bottom: 0.25rem; }
+        .newsletter-title { font-family: var(--font-display); font-size: clamp(1.8rem, 4vw, 3rem); color: var(--ink); line-height: 1.15; margin-bottom: 0.5rem; }
+        .newsletter-sub { font-size: 0.95rem; color: var(--muted); max-width: 420px; line-height: 1.7; margin-bottom: 1.5rem; }
+        .newsletter-form { display: flex; flex-direction: column; gap: 0.75rem; max-width: 460px; width: 100%; }
+        .newsletter-field { display: flex; flex-direction: column; gap: 0.35rem; text-align: left; }
+        .newsletter-field label { font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(232,228,217,0.45); }
+        .newsletter-input {
+            background: var(--surface);
+            border: 1px solid rgba(232,228,217,0.15);
+            border-radius: 4px;
+            padding: 0.75rem 1rem;
+            color: var(--ink);
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color var(--ease);
+            width: 100%;
+        }
+        .newsletter-input::placeholder { color: rgba(232,228,217,0.3); }
+        .newsletter-input:focus { border-color: rgba(232,228,217,0.4); }
+        .newsletter-btn {
+            background: var(--teal);
+            color: var(--dark);
+            border: none;
+            border-radius: 4px;
+            padding: 0.8rem 1.4rem;
+            font-family: var(--font-display);
+            font-size: 0.95rem;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            transition: background var(--ease), transform 0.1s;
+            margin-top: 0.25rem;
+        }
+        .newsletter-btn:hover { background: #6ee8d5; }
+        .newsletter-btn:active { transform: scale(0.98); }
+        .newsletter-note { font-size: 0.72rem; color: rgba(232,228,217,0.25); margin-top: 0.5rem; }
+
+        /* ── DOMAIN WAR ── */
+        #domain-war { background: var(--surface); padding: 6rem 4rem; border-top: 1px solid rgba(232,228,217,0.08); }
+        .domain-war-inner { max-width: 860px; margin: 0 auto; }
+        .domain-war-label { font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--coral); margin-bottom: 1.25rem; }
+        .domain-war-title { font-family: var(--font-display); font-size: clamp(2rem, 4vw, 3rem); font-weight: 900; color: var(--ink); line-height: 1.1; margin-bottom: 2.5rem; }
+        .domain-war-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; margin-bottom: 3rem; }
+        .dw-card { background: var(--mid); border-radius: 8px; padding: 2rem; border: 1px solid rgba(232,228,217,0.08); }
+        .dw-card-title { font-family: var(--font-display); font-size: 1.1rem; font-weight: 800; color: var(--ink); margin-bottom: 0.75rem; }
+        .dw-card-body { font-size: 0.88rem; color: rgba(232,228,217,0.65); line-height: 1.65; }
+        .domain-list { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1.25rem 0; }
+        .domain-tag { background: rgba(232,228,217,0.06); border: 1px solid rgba(232,228,217,0.12); border-radius: 4px; padding: 0.3rem 0.65rem; font-size: 0.78rem; font-family: var(--font-body); color: rgba(232,228,217,0.55); letter-spacing: 0.04em; }
+        .domain-tag.owned { color: var(--teal); border-color: rgba(77,201,183,0.3); background: rgba(77,201,183,0.06); }
+        .dw-note { font-size: 0.8rem; color: rgba(232,228,217,0.35); margin-top: 1rem; font-style: italic; }
+        @media(max-width:700px){ .domain-war-grid { grid-template-columns: 1fr; } }
+
+        /* ── FOOTER ── */
+        footer { background: var(--dark); color: rgba(232,228,217,0.3); padding: 2rem 4rem; font-size: 0.75rem; display: flex; justify-content: space-between; align-items: center; }
+        footer a { color: rgba(232,228,217,0.45); text-decoration: none; transition: color var(--ease); }
+        footer a:hover { color: var(--ink); }
+
+        /* ── MODALS ── */
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.65); z-index: 1000; align-items: center; justify-content: center; padding: 2rem; backdrop-filter: blur(4px); }
+        .modal-overlay.open { display: flex; }
+        .modal { background: var(--cream); border-radius: 12px; padding: 2.5rem; max-width: 560px; width: 100%; max-height: 84vh; overflow-y: auto; position: relative; }
+        .modal.wide { max-width: 700px; }
+        .modal-x { position: absolute; top: 1.25rem; right: 1.25rem; background: none; border: none; cursor: pointer; font-size: 1.5rem; color: var(--muted); line-height: 1; }
+        .modal-x:hover { color: var(--ink); }
+        .modal-eyebrow { font-size: 0.68rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--coral); font-weight: 700; margin-bottom: 0.5rem; }
+        .modal-h { font-family: var(--font-display); font-size: 1.9rem; font-weight: 900; margin-bottom: 1.5rem; }
+        .modal-body { font-size: 0.93rem; line-height: 1.78; color: var(--ink); }
+        .modal-body p { margin-bottom: 1rem; }
+        .modal-body .footnote { font-size: 0.78rem; color: var(--muted); font-style: italic; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 1rem; margin-top: 0.5rem; }
+        .reading-body { font-family: Georgia, serif; font-size: 1rem; line-height: 1.85; color: var(--ink); }
+        .reading-body p { margin-bottom: 1.2rem; }
+
+        /* ── POETRY RECOMBINATOR ── */
+        .poem-section {
+            grid-column: 1 / -1;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            padding-top: 3.5rem;
+            margin-top: 2rem;
+        }
+        .poem-section .project-col-title { margin-bottom: 0.5rem; }
+        .poem-intro { font-size: 0.87rem; color: rgba(250,247,240,0.5); line-height: 1.65; margin-bottom: 2rem; max-width: 540px; }
+        .poem-controls {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        .poem-slider-wrap {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .poem-slider-label {
+            font-size: 0.65rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: rgba(250,247,240,0.35);
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        .poem-count {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--yellow);
+            min-width: 2.5rem;
+            line-height: 1;
+        }
+        input[type="range"].poem-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 180px;
+            height: 3px;
+            background: rgba(255,255,255,0.12);
+            border-radius: 2px;
+            outline: none;
+            cursor: pointer;
+        }
+        input[type="range"].poem-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 15px; height: 15px;
+            border-radius: 50%;
+            background: var(--yellow);
+            cursor: pointer;
+        }
+        input[type="range"].poem-slider::-moz-range-thumb {
+            width: 15px; height: 15px;
+            border-radius: 50%;
+            background: var(--yellow);
+            border: none;
+            cursor: pointer;
+        }
+        .poem-status {
+            font-size: 0.68rem;
+            letter-spacing: 0.1em;
+            color: rgba(250,247,240,0.25);
+            font-style: italic;
+        }
+        .poem-output {
+            background: rgba(255,255,255,0.025);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-left: 4px solid var(--yellow);
+            border-radius: 8px;
+            padding: 2.5rem 3rem;
+            margin-bottom: 1rem;
+            display: none;
+            font-family: Georgia, serif;
+        }
+        .poem-output.visible { display: block; }
+        .poem-output.spin { animation: blink 0.35s ease; }
+        .poem-line {
+            display: block;
+            font-size: 1rem;
+            color: rgba(250,247,240,0.82);
+            line-height: 1.95;
+            position: relative;
+        }
+        .poem-line-src {
+            font-family: var(--font-body);
+            font-size: 0.5rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: rgba(250,247,240,0.15);
+            margin-left: 0.6rem;
+            vertical-align: middle;
+        }
+        .poem-footer {
+            display: none;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 0.5rem;
+        }
+        .poem-footer.visible { display: flex; }
+        .poem-copy-btn {
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            background: none;
+            border: 1px solid rgba(255,255,255,0.18);
+            color: rgba(250,247,240,0.4);
+            padding: 0.4rem 1rem;
+            border-radius: 3px;
+            cursor: pointer;
+            font-family: var(--font-body);
+            transition: all var(--ease);
+        }
+        .poem-copy-btn:hover { border-color: var(--yellow); color: var(--yellow); }
+        .poem-attrib {
+            font-size: 0.65rem;
+            color: rgba(250,247,240,0.2);
+            letter-spacing: 0.08em;
+        }
+
+        /* ── ANTHOLOGY WALL ── */
+        #anthology {
+            background: #0b0b18;
+            border-top: 1px solid rgba(232,228,217,0.11);
+            padding: 5rem 4rem 7rem;
+        }
+        .anthology-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 3.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .anthology-header-left { max-width: 520px; }
+        .anthology-count {
+            font-size: 0.65rem;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: rgba(232,228,217,0.2);
+            white-space: nowrap;
+        }
+        .anthology-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1px;
+            background: rgba(232,228,217,0.07);
+        }
+        .anthology-empty {
+            grid-column: 1 / -1;
+            background: #0b0b18;
+            padding: 4rem 2rem;
+            text-align: center;
+            color: rgba(232,228,217,0.18);
+            font-style: italic;
+            font-size: 0.9rem;
+        }
+        .anthology-card {
+            background: #0b0b18;
+            padding: 2.5rem 2rem 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 280px;
+            position: relative;
+            transition: background var(--ease);
+        }
+        .anthology-card:hover { background: #0f0f20; }
+        .anthology-card-title {
+            font-family: var(--font-display);
+            font-size: 0.7rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--yellow);
+            margin-bottom: 1rem;
+            opacity: 0.65;
+        }
+        .anthology-card-poem {
+            font-family: Georgia, serif;
+            font-size: 0.88rem;
+            line-height: 1.85;
+            color: rgba(232,228,217,0.72);
+            flex: 1;
+            overflow: hidden;
+            max-height: 180px;
+            -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+            mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+        }
+        .anthology-card-poem.expanded {
+            max-height: none;
+            -webkit-mask-image: none;
+            mask-image: none;
+        }
+        .anthology-card-foot {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(232,228,217,0.06);
+        }
+        .anthology-card-sig {
+            font-style: italic;
+            font-size: 0.85rem;
+            color: rgba(232,228,217,0.45);
+        }
+        .anthology-card-sig::before { content: '— '; }
+        .anthology-card-meta {
+            font-size: 0.58rem;
+            letter-spacing: 0.1em;
+            color: rgba(232,228,217,0.18);
+            text-align: right;
+        }
+        .anthology-card-del {
+            position: absolute;
+            top: 1rem; right: 1rem;
+            background: none;
+            border: none;
+            color: rgba(232,228,217,0.12);
+            font-size: 0.85rem;
+            cursor: pointer;
+            padding: 0.2rem 0.4rem;
+            transition: color var(--ease);
+        }
+        .anthology-card:hover .anthology-card-del { color: rgba(232,228,217,0.3); }
+        .anthology-card-del:hover { color: var(--coral) !important; }
+        .anthology-expand {
+            font-size: 0.6rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: rgba(232,228,217,0.2);
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-family: var(--font-body);
+            padding: 0;
+            margin-top: 0.5rem;
+            transition: color var(--ease);
+        }
+        .anthology-expand:hover { color: var(--yellow); }
+
+        /* Save button */
+        .poem-save-btn {
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            background: none;
+            border: 1px solid rgba(237,217,58,0.35);
+            color: rgba(237,217,58,0.65);
+            padding: 0.4rem 1rem;
+            border-radius: 3px;
+            cursor: pointer;
+            font-family: var(--font-body);
+            transition: all var(--ease);
+        }
+        .poem-save-btn:hover { border-color: var(--yellow); color: var(--yellow); }
+
+        /* Save modal */
+        .save-modal-overlay {
+            display: none;
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 1001;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            backdrop-filter: blur(6px);
+        }
+        .save-modal-overlay.open { display: flex; }
+        .save-modal {
+            background: #13131f;
+            border: 1px solid rgba(232,228,217,0.1);
+            border-radius: 8px;
+            padding: 2.5rem;
+            max-width: 440px;
+            width: 100%;
+            position: relative;
+        }
+        .save-modal-eyebrow {
+            font-size: 0.62rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--yellow);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        .save-modal-title {
+            font-family: var(--font-display);
+            font-size: 1.7rem;
+            font-weight: 900;
+            margin-bottom: 0.4rem;
+        }
+        .save-modal-sub {
+            font-size: 0.82rem;
+            color: rgba(232,228,217,0.4);
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+        .save-modal input {
+            width: 100%;
+            padding: 0.7rem 1rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 4px;
+            color: var(--ink);
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            margin-bottom: 0.75rem;
+            transition: border-color var(--ease);
+        }
+        .save-modal input::placeholder { color: rgba(232,228,217,0.22); }
+        .save-modal input:focus { outline: none; border-color: var(--yellow); }
+        .save-modal-actions { display: flex; gap: 0.75rem; margin-top: 1.5rem; }
+        .save-modal-x {
+            position: absolute; top: 1rem; right: 1rem;
+            background: none; border: none; color: rgba(232,228,217,0.3);
+            font-size: 1.3rem; cursor: pointer; line-height: 1;
+        }
+        .save-modal-x:hover { color: var(--ink); }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 1024px) {
+            .services-split, .about-split { grid-template-columns: 1fr; }
+            .services-sticky, .about-sticky { position: static; height: auto; }
+            #contact { grid-template-columns: 1fr; gap: 2rem; }
+        }
+        @media (max-width: 768px) {
+            :root { --rail: 0px; }
+            .left-rail { display: none; }
+            #hero { grid-template-columns: 1fr; }
+            .hero-right { border-top: 1px solid rgba(232,228,217,0.06); }
+            .project-grid { grid-template-columns: 1fr; }
+            .game-wrap { grid-template-columns: 1fr; }
+            #project { padding: 5rem 2rem; }
+            footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ═══════════════ LEFT RAIL NAV ═══════════════ -->
+<nav class="left-rail" id="left-rail">
+    <a href="#hero" class="rail-logo">DM</a>
+    <ul class="rail-links" style="list-style:none;">
+        <li><a href="#work" class="active">Work</a></li>
+        <li><a href="#project">Project</a></li>
+        <li><a href="#services">Hire</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li><a href="#domain-war">War</a></li>
+    </ul>
+    <div class="rail-status"></div>
+</nav>
+
+<div class="site-content">
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<section id="hero">
+    <div class="hero-left">
+        <div class="hero-eyebrow-row">
+            <span>Denver, CO</span>
+            <span class="dot">·</span>
+            <span class="avail">Available for hire</span>
+        </div>
+        <div class="hero-name-block">
+            <h1 class="hero-name">
+                Dustin<span class="last">Mark.</span>
+            </h1>
+        </div>
+        <div class="hero-bottom-strip">
+            <span class="hero-city">39°45'N 104°59'W</span>
+            <span class="hero-scroll-hint">Scroll</span>
+        </div>
+    </div>
+    <div class="hero-right">
+        <div style="margin-top: auto;">
+            <div class="hero-op-label">Currently operating as</div>
+            <span class="rotating-word" id="rotating-word">humor writer</span>
+            <div style="margin-top: 0.75rem; font-size: 0.7rem; letter-spacing: 0.08em; color: rgba(232,228,217,0.25); margin-bottom: 3rem;">Changes every few seconds. Mostly accurate.</div>
+            <div class="hero-cta">
+                <a href="#work" class="btn btn-primary">Read the work</a>
+                <a href="#services" class="btn btn-secondary">Hire me for something</a>
+            </div>
+        </div>
+        <div class="hero-coord">2025 · Dustin Mark · Denver</div>
+    </div>
+</section>
+
+<!-- ═══════════════ PUBLISHED WORK — HORIZONTAL SCROLL ═══════════════ -->
+<section id="work">
+    <div class="work-header fade-in">
+        <div class="work-header-left">
+            <div class="section-label">Published Work</div>
+            <h2 class="section-title">Words<br>on the web.</h2>
+        </div>
+        <div class="work-header-right">
+            Drag or scroll to browse
+            <span>07 pieces</span>
+        </div>
+    </div>
+    <div class="work-scroll-track" id="work-scroll-track">
+
+        <a href="https://www.mcsweeneys.net" target="_blank" class="work-card-h">
+            <div>
+                <div class="wch-top">
+                    <span class="wch-num">01</span>
+                    <span class="wch-pub" style="color:var(--coral)">McSweeney's</span>
+                </div>
+                <div class="wch-title">"The Do's and Don'ts of Falling in Love"</div>
+                <div class="wch-desc">A structured guide to romantic catastrophe. Widely considered the definitive listicle on the subject by at least one person.</div>
+            </div>
+            <div class="wch-bottom">
+                <span class="wch-year">2014</span>
+                <span class="wch-arrow">→</span>
+            </div>
+        </a>
+
+        <a href="https://medium.com/@dsamuelmark" target="_blank" class="work-card-h">
+            <div>
+                <div class="wch-top">
+                    <span class="wch-num">02</span>
+                    <span class="wch-pub" style="color:var(--teal)">Slackjaw</span>
+                </div>
+                <div class="wch-title">"What Your Number of Pillows Says About You"</div>
+                <div class="wch-desc">A personality assessment framework based on pillow count. Later featured on the Drew Barrymore Show, which is a real thing that happened.</div>
+            </div>
+            <div class="wch-bottom">
+                <span class="wch-year">2018</span>
+                <span class="wch-arrow">→</span>
+            </div>
+        </a>
+
+        <a href="https://medium.com/@dsamuelmark" target="_blank" class="work-card-h">
+            <div>
+                <div class="wch-top">
+                    <span class="wch-num">03</span>
+                    <span class="wch-pub" style="color:var(--lavender)">Medium</span>
+                </div>
+                <div class="wch-title">"Vibrator or Nickname of a Kid on My Son's Little League Team"</div>
+                <div class="wch-desc">A disambiguation piece. Linguistically rigorous. A triumph of form meeting function.</div>
+            </div>
+            <div class="wch-bottom">
+                <span class="wch-year">2021</span>
+                <span class="wch-arrow">→</span>
+            </div>
+        </a>
+
+        <a href="https://medium.com/@dsamuelmark" target="_blank" class="work-card-h">
+            <div>
+                <div class="wch-top">
+                    <span class="wch-num">04</span>
+                    <span class="wch-pub" style="color:var(--yellow)">Medium</span>
+                </div>
+                <div class="wch-title">"Jersey Mike's Last Chance"</div>
+                <div class="wch-desc">A long-form essay on self-mythology, personal narrative, and a sandwich chain. One of those is used metaphorically. Probably.</div>
+            </div>
+            <div class="wch-bottom">
+                <span class="wch-year">2022</span>
+                <span class="wch-arrow">→</span>
+            </div>
+        </a>
+
+        <a href="https://medium.com/@dsamuelmark" target="_blank" class="work-card-h">
+            <div>
+                <div class="wch-top">
+                    <span class="wch-num">05</span>
+                    <span class="wch-pub" style="color:var(--sage)">Annual Column</span>
+                </div>
+                <div class="wch-title">"Every* Muscle in My Body"</div>
+                <div class="wch-desc">A recurring annual column since 2019. The asterisk is doing significant structural work. Ongoing indefinitely, or until further notice.</div>
+            </div>
+            <div class="wch-bottom">
+                <span class="wch-year">2019–Present</span>
+                <span class="wch-arrow">→</span>
+            </div>
+        </a>
+
+        <a href="https://dsamuelmark.medium.com" target="_blank" class="work-card-h">
+            <div>
+                <div class="wch-top">
+                    <span class="wch-num">06</span>
+                    <span class="wch-pub" style="color:var(--ink)">Medium</span>
+                </div>
+                <div class="wch-title">"At Long Last, I Deleted Twitter"</div>
+                <div class="wch-desc">A farewell essay. January 2025. Decisive. Unambiguous. Slightly overdue. The account is gone; the essay remains as evidence.</div>
+            </div>
+            <div class="wch-bottom">
+                <span class="wch-year">Jan 2025</span>
+                <span class="wch-arrow">→</span>
+            </div>
+        </a>
+
+
+        <div class="work-end-cap">
+            <span>End of index</span>
+            <a href="https://medium.com/@dsamuelmark" target="_blank" class="work-more-link">More on Medium →</a>
+        </div>
+
+    </div>
+</section>
+
+<!-- ═══════════════ THE DUSTIN MARK PROJECT ═══════════════ -->
+<section id="project">
+    <div class="section-label">Multimedia Universe</div>
+    <h2 class="section-title">The Dustin Mark<br>Project.</h2>
+    <p class="section-intro">Four narrative podcasts. Two self-published books. One fictional character who began as a massage therapy student, got canceled, moved to a hostel, moved to Denmark, and died.</p>
+
+    <div class="project-grid">
+        <div class="fade-in">
+            <div class="project-col-title">🎙 The Podcasts</div>
+            <div class="episode-list">
+                <a class="episode-item active" href="https://open.spotify.com/show/3kWJ47mpl0szZw3LFPtiyK" target="_blank">
+                    <div class="ep-play"><img src="pod1cover.jpg" alt="Vol. I"><span>&#9654;</span></div>
+                    <div class="ep-info"><div class="ep-title">Dustin Mark: Massage Therapist (License Pending)</div><div class="ep-sub">A student shares wellness knowledge — until he doesn't</div></div>
+                    <div class="ep-tag">Vol. I</div>
+                </a>
+                <a class="episode-item" href="https://open.spotify.com/show/57CV13fPrMDQb4pmlwg120" target="_blank">
+                    <div class="ep-play"><img src="pod2cover.jpg" alt="Vol. II"><span>&#9654;</span></div>
+                    <div class="ep-info"><div class="ep-title">Dustin Mark: Canceled Massage Therapist</div><div class="ep-sub">Expelled, relocated to Las Vegas, Looking Out for Number 1</div></div>
+                    <div class="ep-tag">Vol. II</div>
+                </a>
+                <a class="episode-item" href="https://open.spotify.com/show/48vVJLnwFEF9AxYc1XlHgq" target="_blank">
+                    <div class="ep-play"><img src="pod3cover.png" alt="Vol. III"><span>&#9654;</span></div>
+                    <div class="ep-info"><div class="ep-title">Dustin Mark's Everything Club</div><div class="ep-sub">Reformed. Living in a hostel. Everything Is Poetry.</div></div>
+                    <div class="ep-tag">Vol. III</div>
+                </a>
+                <a class="episode-item" href="https://open.spotify.com/show/5gpDk98ySHgL4Cm30pO05t" target="_blank">
+                    <div class="ep-play"><img src="pod4cover.jpg" alt="Vol. IV"><span>&#9654;</span></div>
+                    <div class="ep-info"><div class="ep-title">Dustin Mark Does Denmark</div><div class="ep-sub">Relocates to Aarhus. Falls in love. Dies.</div></div>
+                    <div class="ep-tag">Vol. IV</div>
+                </a>
+            </div>
+            <a href="https://open.spotify.com/show/3kWJ47mpl0szZw3LFPtiyK" target="_blank" class="spotify-btn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+                Listen on Spotify
+            </a>
+        </div>
+
+        <div class="fade-in">
+            <div class="project-col-title">📚 The Books</div>
+            <div class="book-cards">
+                <div class="book-card">
+                    <div class="book-cover b1"><img src="book1cover.jpg" alt="The Dustin Mark Poems: 1–100"></div>
+                    <div class="book-info">
+                        <h4>The Dustin Mark Poems: 1&ndash;100</h4>
+                        <p>100 Poems That No Longer Need To Be Written. Composed during captivity in his uncle's basement — then polished after release.</p>
+                        <div class="book-actions">
+                            <a href="https://www.amazon.com/Dustin-Mark-Poems-Longer-Written/dp/B0D9MQTS6Z/" target="_blank" class="btn-ghost yellow">Buy on Amazon</a>
+                            <a href="https://open.spotify.com/show/70YMop8WYiyQRkg9MUmIUR" target="_blank" class="btn-ghost yellow">Audiobook</a>
+                            <button class="btn-ghost" onclick="openReadModal('book1')">Read Online</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="book-card">
+                    <div class="book-cover b2"><img src="book2cover.jpeg" alt="The Dustin Mark Poems: 101–Death"></div>
+                    <div class="book-info">
+                        <h4>The Dustin Mark Poems: 101 &mdash; Death</h4>
+                        <p>A Posthumous Collection. Compiled by his sister and Danish friend Erik following his death. ~⅓ in Danish. This is not a translation.</p>
+                        <div class="book-actions">
+                            <a href="https://www.amazon.com/Dustin-Mark-Poems-Posthumous-Collection/dp/B0CPVP526Y/" target="_blank" class="btn-ghost yellow">Buy on Amazon</a>
+                            <button class="btn-ghost" onclick="openReadModal('book2')">Read Online</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="audiobook-player">
+                <img src="book1cover.jpg" alt="Audiobook cover" class="ab-cover">
+                <div class="ab-label">🎧 Audiobook &mdash; The Dustin Mark Poems: 1&ndash;100</div>
+                <div style="margin-bottom:0.75rem">
+                    <a href="https://open.spotify.com/show/70YMop8WYiyQRkg9MUmIUR" target="_blank" class="spotify-btn" style="font-size:0.78rem;padding:0.5rem 1.1rem">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+                        Listen on Spotify
+                    </a>
+                </div>
+                <div class="player-track" id="player-track">Or upload a file to play below</div>
+                <div class="player-controls">
+                    <button class="player-btn" id="btn-rw"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 .49-3.51"></path></svg></button>
+                    <button class="player-btn pp" id="btn-pp"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"></polygon></svg></button>
+                    <button class="player-btn" id="btn-ff"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-.49-3.51"></path></svg></button>
+                    <div class="player-progress" id="progress-bar"><div class="player-fill" id="progress-fill"></div></div>
+                    <span class="player-time" id="player-time">0:00 / 0:00</span>
+                </div>
+                <label class="upload-label" for="audio-file">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                    Upload audio file
+                </label>
+                <input type="file" id="audio-file" accept="audio/*" style="display:none">
+            </div>
+            <div class="upload-zone" onclick="document.getElementById('book-file').click()">
+                <div class="upload-zone-text">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="opacity:.4;display:block;margin:0 auto 0.5rem"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                    <strong>Upload a book</strong> to make it readable in the browser<br>
+                    <small style="font-size:.7rem;opacity:.6">PDF or .txt — stored locally in your session</small>
+                </div>
+                <input type="file" id="book-file" accept=".txt,.pdf" style="display:none">
+            </div>
+        </div>
+
+        <div class="generator-section fade-in">
+            <div class="project-col-title">🎲 Your Own Project</div>
+            <div class="gen-meta">
+                <p>Yes, it's needlessly confusing that the Dustin Mark in <em>The Dustin Mark Project</em> is not the Dustin Mark who created its contents.</p>
+                <p class="gen-dialogue">'Wait, the Dustin Mark on the podcasts isn't the real Dustin Mark? Why didn't he just name the character something else?'</p>
+                <p class="gen-response">'Yeah, I know.'</p>
+                <p>None of it is real and identity is a construct. Would you like your own project like this?</p>
+            </div>
+            <div class="gen-inputs">
+                <input type="text" id="gen-name" class="gen-input" placeholder="Your name">
+                <input type="text" id="gen-start" class="gen-input" placeholder="Starting point (e.g. 'disgraced tax attorney')">
+                <button class="btn-gen" onclick="generatePersonal()">Generate My Project</button>
+            </div>
+            <div class="gen-output" id="gen-output" style="display:none;padding:1.5rem;border-left-width:4px;"></div>
+        </div>
+
+    </div>
+</section>
+
+<!-- ═══════════════ SERVICES — SPLIT SCROLL ═══════════════ -->
+<section id="services">
+    <div class="services-split">
+        <div class="services-sticky">
+            <div class="section-label">Creative Services</div>
+            <h2 class="section-title">What I can<br>do for you.</h2>
+            <p class="section-intro">A menu of creative services. All offered with full professionalism and a complete understanding that most inquiries won't pan out. That's okay.</p>
+            <div class="services-sticky-footer">11 services available · Hover a card</div>
+        </div>
+        <div class="services-scroll">
+            <div class="service-card fade-in"><div class="svc-num">01</div><div class="svc-title">Full-Time Employment</div><div class="svc-tag">Broad Ask</div><p class="svc-desc">Hire me as a real, salaried employee with benefits. I will attend most meetings and occasionally have strong opinions, when appropriate.</p><p class="svc-price">Pricing: Negotiable. Benefits appreciated. I have a dog to support.</p><button class="svc-sample" onclick="openSample('employment')">See sample work &rarr;</button></div>
+            <div class="service-card fade-in"><div class="svc-num">02</div><div class="svc-title">Feature Screenplay</div><div class="svc-tag">Long-Form</div><p class="svc-desc">A complete 95–115 page feature film script with actual three-act structure, character arcs, and scene descriptions that are technically correct. (You want more than 115 pages? Trust me, I would <em>love</em> that.)</p><p class="svc-price">Pricing: WGA rates work for me. But honestly I'm a bad negotiator so have at it.</p><button class="svc-sample" onclick="openSample('screenplay')">See sample work &rarr;</button></div>
+            <div class="service-card fade-in"><div class="svc-num">03</div><div class="svc-title">Novel</div><div class="svc-tag">Long-Form</div><p class="svc-desc">80,000–100,000 words of literary fiction. No romance (that's nonfiction) or horror (don't care for it).</p><p class="svc-price">Pricing: I have no idea.</p><button class="svc-sample" onclick="openSample('novel')">See sample work &rarr;</button></div>
+            <div class="service-card fade-in"><div class="svc-num">04</div><div class="svc-title">Podcast Series</div><div class="svc-tag">Audio</div><p class="svc-desc">Narrative audio content from someone who has actually produced four narrative podcast series. I certainly know a lot more now than I did when I began, which doesn't flatter the early work.</p><p class="svc-price">Pricing: No more free podcasts.</p><button class="svc-sample" onclick="openSample('podcast')">See sample work &rarr;</button></div>
+            <div class="service-card fade-in"><div class="svc-num">05</div><div class="svc-title">Greeting Card</div><div class="svc-tag">Short-Form ✦</div><p class="svc-desc">One (1) sentiment appropriate for a life event. Suitable for framing, gifting, or immediate recycling. Bulk orders welcome. Considering how much I dislike greeting cards, I can promise I'll produce something unique.</p><p class="svc-price">Pricing: Let's be honest, this one should be cheap.</p><button class="svc-sample" onclick="openSample('card')">See sample work &rarr;</button></div>
+            <div class="service-card fade-in"><div class="svc-num">06</div><div class="svc-title">Corporate Copy</div><div class="svc-tag">Commercial</div><p class="svc-desc">Marketing copy that, at its core, markets. Guaranteed to market.</p><p class="svc-price">Pricing: Market rate.</p><button class="svc-sample" onclick="openSample('corporate')">See sample work &rarr;</button></div>
+            <div class="service-card fade-in"><div class="svc-num">07</div><div class="svc-title">Best Man / Toast</div><div class="svc-tag">Special Occasion</div><p class="svc-desc">However many minutes of whatever your people respond to. I remember almost everything I've ever done, so I have stories. I promise <em>tears</em>.</p><p class="svc-price">Pricing: Just get me there.</p><button class="svc-sample" onclick="openSample('toast')">See sample work &rarr;</button></div>
+            <div class="service-card fade-in"><div class="svc-num">08</div><div class="svc-title">Eulogy</div><div class="svc-tag">Special Occasion ✦</div><p class="svc-desc">If the person was interesting, great. If they were not, that's when I really earn my paycheck.</p><p class="svc-price">Pricing: Scale.</p><button class="svc-sample" onclick="openSample('eulogy')">See sample work &rarr;</button></div>
+            <div class="service-card fade-in"><div class="svc-num">09</div><div class="svc-title">Humor Consultation</div><div class="svc-tag">Advisory</div><p class="svc-desc">30 minutes during which I will tell you if something is funny. I will not be polite about it. Bring a thick skin and your best material.</p><p class="svc-price">Pricing: Depends how funny you are.</p><button class="svc-sample" onclick="openSample('consult')">See sample work &rarr;</button></div>
+            <div class="service-card fade-in"><div class="svc-num">10</div><div class="svc-title">Voiceover Work</div><div class="svc-tag">Audio</div><p class="svc-desc">A voice with four narrative podcasts behind it. Probably hundreds of hours. I'll do any voice, no questions asked.</p><p class="svc-price">Pricing: Depends what voice I've agreed to do.</p><button class="svc-sample" onclick="openSample('voiceover')">See sample work &rarr;</button></div>
+            <div class="service-card fade-in"><div class="svc-num">11</div><div class="svc-title">Children's Book</div><div class="svc-tag">Short-Form</div><p class="svc-desc">A picture book for children, written so the adult reading it out loud doesn't lose the will to live by page three. Rhymes cost more.</p><p class="svc-price">Pricing: Rhymes cost more.</p><button class="svc-sample" onclick="openSample('childrens')">See sample work &rarr;</button></div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════ ABOUT — SPLIT SCROLL ═══════════════ -->
+<section id="about">
+    <div class="about-split">
+        <div class="about-sticky">
+            <div class="about-sticky-inner">
+                <div class="about-sticky-label">About</div>
+                <div class="photo-strip">
+                    <div class="photo-frame" id="pf0"><img src="dmpic6.jpg" alt="Dustin Mark"></div>
+                    <div class="photo-frame" id="pf1"><img src="IMG_0021%202.jpeg" alt="Dustin Mark"></div>
+                    <div class="photo-frame" id="pf2"><img src="toga2.jpg" alt="Dustin Mark"></div>
+                    <div class="photo-frame" id="pf3"><img src="dmpic2.jpeg" alt="Dustin Mark"></div>
+                </div>
+                <div class="photo-upload-row">
+                    <label class="pu-label" for="pu0">↑ Photo 1</label><input type="file" id="pu0" accept="image/*" style="display:none" onchange="setPhoto(0,this)">
+                    <label class="pu-label" for="pu1">↑ Photo 2</label><input type="file" id="pu1" accept="image/*" style="display:none" onchange="setPhoto(1,this)">
+                    <label class="pu-label" for="pu2">↑ Photo 3</label><input type="file" id="pu2" accept="image/*" style="display:none" onchange="setPhoto(2,this)">
+                    <label class="pu-label" for="pu3">↑ Photo 4</label><input type="file" id="pu3" accept="image/*" style="display:none" onchange="setPhoto(3,this)">
+                </div>
+            </div>
+        </div>
+
+        <div class="about-scroll">
+            <div class="about-text fade-in">
+                <h2>The guy<br>behind the<br><em>words.</em></h2>
+                <p>Humor writer, editor, and multimedia creator with over 15 years of published comedy and conceptual work. Contributor to McSweeney's Internet Tendency and Slackjaw. Based in Denver, CO.</p>
+                <p>B.A. in English from the University of Texas at Austin 😉. Former Associate Editor at <em>Texas Travesty</em>, the country's largest collegiate humor publication. Current-ish assistant manager at a recreational sports facility — which, against all expectations, has prepared him for most of this.</p>
+                <div class="about-links">
+                    <a href="https://medium.com/@dsamuelmark" target="_blank" class="about-link">Medium →</a>
+                    <a href="https://open.spotify.com" target="_blank" class="about-link">Spotify →</a>
+                    <a href="mailto:dsamuelmark@gmail.com" class="about-link">Email →</a>
+                </div>
+            </div>
+
+            <!-- Fact or Fiction -->
+            <div class="game-section fade-in">
+                <h3>Fact or Fiction?</h3>
+                <p class="game-sub">Think you know Dustin? Prove it.</p>
+                <div class="game-wrap">
+                    <div>
+                        <div class="game-card-container">
+                            <div class="game-card" id="game-card">
+                                <div class="game-face game-front"><div class="game-claim" id="game-claim">Loading…</div><div class="game-btns"><button class="game-btn fact" onclick="guess(true)">✓ Fact</button><button class="game-btn fiction" onclick="guess(false)">✗ Fiction</button></div></div>
+                                <div class="game-face game-back" id="game-back"><div class="result-emoji" id="result-emoji">🎉</div><div class="result-head" id="result-head">Correct!</div><div class="result-exp" id="result-exp"></div></div>
+                            </div>
+                        </div>
+                        <div class="game-controls">
+                            <button class="btn btn-secondary" id="game-next" onclick="nextQ()" style="display:none;padding:0.6rem 1.4rem;font-size:0.85rem;">Next →</button>
+                            <div class="game-score-row">Score: <strong id="sc-right">0</strong> / <strong id="sc-total">0</strong></div>
+                        </div>
+                    </div>
+                    <div class="game-legend" style="align-self:center;">
+                        <p style="font-family:var(--font-display);font-size:1.2rem;font-weight:700;margin-bottom:0.75rem;color:var(--ink);">How well do<br>you know Dustin?</p>
+                        <p style="margin-bottom:1rem;">Each card presents a claim about Dustin. Getting them right still doesn't mean you know him.</p>
+                        <p style="font-size:0.75rem;color:rgba(232,228,217,0.35);">12 questions · Shuffled each session</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════ CONTACT ═══════════════ -->
+<section id="contact">
+    <div class="contact-left">
+        <div class="section-label">Get in touch</div>
+        <h2 class="section-title">Let's make<br>something.</h2>
+    </div>
+    <div class="contact-right">
+        <p class="contact-sub">Interested in hiring me for something reasonable, or unreasonable? Either works.</p>
+        <a href="mailto:dsamuelmark@gmail.com" class="contact-email">dsamuelmark@gmail.com</a>
+    </div>
+</section>
+
+<!-- ═══════════════ NEWSLETTER ═══════════════ -->
+<section id="newsletter">
+    <div class="newsletter-label">Stay in the loop</div>
+    <h2 class="newsletter-title">Occasional dispatches,<br>when the time is right.</h2>
+    <p class="newsletter-sub">Personal emails. Only when there's something to say.</p>
+    <form class="newsletter-form" action="https://eepurl.us20.list-manage.com/subscribe/post?u=1b15b0789355d07febb3369e4&amp;id=df399394cb&amp;f_id=002732eef0" method="post" target="_blank" novalidate>
+        <div class="newsletter-field">
+            <label for="nl-fname">First name</label>
+            <input id="nl-fname" class="newsletter-input" type="text" name="FNAME" placeholder="What do people call you?">
+        </div>
+        <div class="newsletter-field">
+            <label for="nl-email">Email address</label>
+            <input id="nl-email" class="newsletter-input" type="email" name="EMAIL" placeholder="your@email.com" required>
+        </div>
+        <div class="newsletter-field">
+            <label for="nl-dm">Dustin's email address</label>
+            <input id="nl-dm" class="newsletter-input" type="text" name="MMERGE7" placeholder="">
+        </div>
+        <!-- Mailchimp bot trap — do not remove -->
+        <div style="position:absolute;left:-5000px" aria-hidden="true">
+            <input type="text" name="b_1b15b0789355d07febb3369e4_df399394cb" tabindex="-1" value="">
+        </div>
+        <button class="newsletter-btn" type="submit">Subscribe →</button>
+    </form>
+    <p class="newsletter-note">No spam. Unsubscribe anytime.</p>
+</section>
+
+<!-- ═══════════════ DOMAIN WAR ═══════════════ -->
+<section id="domain-war">
+    <div class="domain-war-inner">
+        <div class="domain-war-label">An Ongoing Thing</div>
+        <h2 class="domain-war-title">The Website War.</h2>
+        <div class="domain-war-grid">
+
+            <div class="dw-card">
+                <div class="dw-card-title">The Domain Collection</div>
+                <div class="dw-card-body">
+                    <p>The following URLs have been registered. All of them are Dustin Mark.</p>
+                    <div class="domain-list">
+                        <span class="domain-tag owned">dustinmark.com</span>
+                        <span class="domain-tag owned">dustinmark.baby</span>
+                        <span class="domain-tag owned">dustinmark.creditcard</span>
+                        <span class="domain-tag owned">dustinmark.foundation</span>
+                        <span class="domain-tag owned">dustinmark.hair</span>
+                        <span class="domain-tag owned">dustinmark.motorcycles</span>
+                        <span class="domain-tag owned">dustinmark.surf</span>
+                        <span class="domain-tag owned">dustinmark.tattoo</span>
+                        <span class="domain-tag owned">dustinmark.top</span>
+                        <span class="domain-tag owned">dustinmark.wang</span>
+                        <span class="domain-tag owned">dustinmark.yachts</span>
+                        <span class="domain-tag owned">dustinmark.mom</span>
+                        <span class="domain-tag owned">dustinmark.beauty</span>
+                    </div>
+                    <p>Register your own dustinmark.something and notify us. We'll add it to the list. When the time comes for a public vote, if yours wins you'll receive a special prize and a dedicated section on this website.</p>
+                    <p class="dw-note">The time will come.</p>
+                </div>
+            </div>
+
+            <div class="dw-card">
+                <div class="dw-card-title">The Website Duel</div>
+                <div class="dw-card-body">
+                    <p>Don't like this website? Build your own Dustin Mark website. We'll duel online.</p>
+                    <p>If your site is better, you'll receive the official domain. We'll rematch for the rights when I say so.</p>
+                    <p class="dw-note">Terms subject to my interpretation. Prize TBD. Duel format TBD. This is real.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer>
+    <span>&copy; 2025 Dustin Mark · Denver, CO</span>
+    <span><a href="https://medium.com/@dsamuelmark" target="_blank">Medium</a> · <a href="https://open.spotify.com" target="_blank">Spotify</a> · <a href="mailto:dsamuelmark@gmail.com">Email</a></span>
+</footer>
+
+</div><!-- /site-content -->
+
+<!-- ═══════════════ SAVE MODAL ═══════════════ -->
+<div class="save-modal-overlay" id="save-overlay" onclick="closeSaveModal(event)">
+    <div class="save-modal">
+        <button class="save-modal-x" onclick="document.getElementById('save-overlay').classList.remove('open')">&times;</button>
+        <div class="save-modal-eyebrow">The Anthology</div>
+        <h3 class="save-modal-title">Sign this poem.</h3>
+        <p class="save-modal-sub">Give it a name if you want one, and sign it however you like. It'll live in the anthology below — your local edition.</p>
+        <input type="text" id="save-poem-title" placeholder="Poem title (optional — 'Untitled' works fine)">
+        <input type="text" id="save-poem-author" placeholder="Your name or pseudonym" maxlength="60">
+        <div class="save-modal-actions">
+            <button class="btn-gen" onclick="confirmSave()" style="flex:1;">Sign &amp; Save</button>
+            <button class="btn-secondary btn" onclick="document.getElementById('save-overlay').classList.remove('open')" style="height:46px;">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════ MODALS ═══════════════ -->
+<div class="modal-overlay" id="sample-overlay" onclick="closeOverlay(event,'sample-overlay')">
+    <div class="modal"><button class="modal-x" onclick="closeModal('sample-overlay')">&times;</button><div class="modal-eyebrow" id="s-eyebrow">Sample Work</div><div class="modal-h" id="s-title">Title</div><div class="modal-body" id="s-body"></div></div>
+</div>
+<div class="modal-overlay" id="read-overlay" onclick="closeOverlay(event,'read-overlay')">
+    <div class="modal wide"><button class="modal-x" onclick="closeModal('read-overlay')">&times;</button><div class="modal-eyebrow">The Dustin Mark Project</div><div class="modal-h" id="r-title">Book</div><div class="reading-body" id="r-body"></div></div>
+</div>
+<audio id="audio" style="display:none"></audio>
+
+<!-- ═══════════════ SCRIPTS ═══════════════ -->
+<script>
+// ─── Rail active link ─────────────────────────────────
+const sections = ['hero','work','project','anthology','services','about','contact'];
+const railLinks = document.querySelectorAll('.rail-links a');
+window.addEventListener('scroll', () => {
+    let current = 'hero';
+    sections.forEach(id => {
+        const el = document.getElementById(id);
+        if (el && window.scrollY >= el.offsetTop - 200) current = id;
+    });
+    railLinks.forEach(a => {
+        a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    });
+});
+
+// ─── Rotating hero word ───────────────────────────────
+const WORDS = [
+    // High frequency (3×)
+    'humor writer','humor writer','humor writer',
+    'McSweeney\'s contributor','McSweeney\'s contributor','McSweeney\'s contributor',
+    'podcast auteur','podcast auteur','podcast auteur',
+    'multimedia creator','multimedia creator','multimedia creator',
+    // Medium frequency (2×)
+    'greeting card philosopher','greeting card philosopher',
+    'man of many personas','man of many personas',
+    'Denver-based writer','Denver-based writer',
+    'journalist','journalist',
+    'Oulipian','Oulipian',
+    // Low frequency (1×)
+    'your next full-time employee',
+    'Dachshund dad',
+    'stuff curator',
+    'Jigsaw puzzler',
+    'Working man',
+    'Listener',
+    'Cubs fan',
+    'safe driver',
+    'available for projects',
+    'Reasonable man',
+];
+let wi = 0;
+const wordEl = document.getElementById('rotating-word');
+setInterval(() => {
+    wordEl.style.opacity = '0';
+    setTimeout(() => {
+        wi = (wi + 1) % WORDS.length;
+        wordEl.textContent = WORDS[wi];
+        wordEl.style.opacity = '1';
+    }, 280);
+}, 2600);
+
+// ─── Fade-in observer ─────────────────────────────────
+const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.08 });
+document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+
+// ─── Horizontal scroll drag ────────────────────────────
+const track = document.getElementById('work-scroll-track');
+let isDown = false, startX, scrollLeft;
+track.addEventListener('mousedown', e => {
+    isDown = true;
+    track.style.cursor = 'grabbing';
+    startX = e.pageX - track.offsetLeft;
+    scrollLeft = track.scrollLeft;
+});
+track.addEventListener('mouseleave', () => { isDown = false; track.style.cursor = 'grab'; });
+track.addEventListener('mouseup', () => { isDown = false; track.style.cursor = 'grab'; });
+track.addEventListener('mousemove', e => {
+    if (!isDown) return;
+    e.preventDefault();
+    const x = e.pageX - track.offsetLeft;
+    track.scrollLeft = scrollLeft - (x - startX) * 1.4;
+});
+
+// ─── Episode list ─────────────────────────────────────
+document.querySelectorAll('.episode-item').forEach(item => {
+    item.addEventListener('click', () => {
+        document.querySelectorAll('.episode-item').forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+    });
+});
+
+// ─── Personal Project Generator (Expanded) ────────────
+function pick(arr) { return arr[~~(Math.random()*arr.length)]; }
+
+const P_S1 = [
+    '(License Pending)','(Probably Fine)','(Going Great)','(No Red Flags Yet)',
+    '(Starting Strong)','(So Far So Good)','(Everything\'s Legal)','(Technically Qualified)',
+    '(Nothing to Declare)','(This Is Going Well)','(Fully Committed)','(More or Less Certified)',
+    '(Above Average)','(Under Control)','(Not a Scam)','(An Honest Living)',
+    '(Promising Start)','(Doing It Right)','(Just Getting Started)','(Full of Hope)',
+    '(Genuinely Trying)','(Legitimate Operation)','(Mostly Accredited)','(Enthusiastic)',
+    '(Verified)','(Recommended)','(No Prior Incidents)','(Good Faith Effort)',
+    '(Optimistic)','(Officially Registered)','(Peer-Reviewed, Informally)',
+];
+const P_S2 = [
+    '(Looking Out for Number 1)','(Just Asking Questions)','(Everything\'s Fine)',
+    '(A Fresh Start, Actually)','(Moving On)','(Not What It Looks Like)',
+    '(A New Direction)','(No Regrets)','(Technically Not Banned)',
+    '(A Different Approach)','(Reinventing Myself)','(New Phone, Who\'s This)',
+    '(This Is Fine)','(On My Own Terms)','(Reevaluating Everything)',
+    '(Rebranding)','(A Clean Slate)','(Unaffiliated)','(Independent Operator)',
+    '(Self-Employed Now)','(No Hard Feelings)','(Lessons Learned)',
+    '(Closing the Chapter)','(The Next Version)','(Pivoting, Actually)',
+    '(Focused on the Future)','(It\'s Complicated)','(Doing Great, Actually)',
+    '(No Further Questions)','(Ask Me About It Later)','(Different Energy Now)',
+    '(Unbothered, Mostly)','(Growing From This)','(Not My Fault, Entirely)',
+    '(That\'s Behind Me)','(Choosing Peace)','(Sustainable New Model)',
+];
+const P_C3 = [
+    'Everything Is Poetry','Everything Is Fine, Actually','Finding the Thread',
+    'Something to Say','A New Chapter','The Next Phase','Everything Has Beauty',
+    'The Good Part','Learning to Breathe','Something Better',
+    'All of This Matters','The Work Continues','Trying Again',
+    'Making Peace','Getting There','Slowing Down on Purpose',
+    'The Quiet Season','Noticing Things','Softening the Edges',
+    'What Remains','Still Here','The Long Way Back',
+    'Learning How','Why Not','The Beautiful Part',
+    'None of This Was Wasted','Begin Again','The Part After',
+    'Something Quieter','Arriving','This, Too',
+];
+const P_PLACE = [
+    'Denmark','Portugal','a small town in Wales','the Pacific Northwest',
+    'somewhere quieter','rural France','Iceland','Aarhus',
+    'Norway','a Croatian coastal town','the Algarve','a Finnish island',
+    'Reykjavik','somewhere with good light','a village outside Lyon',
+    'the Scottish Highlands','Lisbon','a town he can\'t spell correctly',
+    'the Basque Country','somewhere with no cell service','rural Japan',
+    'a small Greek island','the Irish countryside','a converted farmhouse in Tuscany',
+    'northern Sweden','a coastal town in New Zealand','Oaxaca',
+    'an Estonian city no one can pronounce','the Faroe Islands','Bruges',
+    'a German village that doesn\'t translate well','somewhere in Andalusia',
+    'the Azores','a place he describes as \'honestly perfect\'','northern Norway',
+];
+const P_TYPE = [
+    'Poems','Manifestos','Observations','Essays','Works','Texts','Notes','Thoughts',
+    'Letters','Declarations','Confessions','Statements','Dispatches','Fragments',
+    'Utterances','Reflections','Apologies','Definitions','Corrections','Testimonies',
+    'Findings','Requests','Assertions','Intentions','Records','Accounts',
+    'Communiqués','Remarks','Arguments','Conclusions',
+];
+const P_QUAL = [
+    'No Longer Need to Be Written','Have Been Written','Exist Now',
+    'Speak for Themselves','Are Done','Stand on Their Own','Are Complete',
+    'Have Been Said','Needed to Happen','Were Always There','Are What They Are',
+    'Will Not Be Revised','Cannot Be Unsaid','Have Found Their Form',
+    'Are Neither Here Nor There','Landed Where They Landed',
+    'Required No Permission','Did Not Ask','Happened Anyway',
+    'Remain','Are Enough','Simply Are','Hold Up','Don\'t Need You to Like Them',
+    'Are For No One in Particular','Exist Independently of Context',
+    'Were Always Going to Be Written','Do What They Do','Make Their Case',
+];
+const P_INCIDENT = [
+    'personal controversy','an incident he declines to specify',
+    'circumstances beyond his control','an argument that went public',
+    'a conflict of interest','something he maintains was misunderstood',
+    'a situation that escalated','a podcast episode that got away from him',
+    'a professional decision he stands by','a misunderstanding involving a client',
+    'events he\'d rather not revisit','an outcome no one predicted',
+    'something the producers describe as unprecedented',
+    'a public disagreement about methodology',
+    'what he calls a difference in professional philosophy',
+    'an email that was not meant for a wide audience',
+    'an incident involving a client, a podcast, and a LinkedIn post',
+    'a misread of the room','a boundary he didn\'t realize was there',
+    'something that wasn\'t even technically illegal',
+    'a situation that grew in the retelling',
+    'a live episode that went somewhere unexpected',
+    'an online exchange that got screenshotted',
+    'a moment of candor that didn\'t land',
+    'a business decision he made publicly and stood behind privately',
+];
+const P_VENUE2 = [
+    'Las Vegas','a different city','a bigger city','a smaller city',
+    'somewhere no one knew him','a coastal town','the suburbs, briefly',
+    'his brother\'s guest room','a sublet he found on Craigslist',
+    'a vacation rental he stayed in too long','the city he grew up in (briefly)',
+    'Phoenix','a city he chose by pointing at a map',
+    'a mid-size city with affordable rent','Tampa',
+    'somewhere he described as \'transitional\'','Denver (different neighborhood)',
+    'the city his ex moved away from','Albuquerque',
+];
+const P_HOSTEL = [
+    'a hostel','a hostel in the old town district','a youth hostel he was slightly too old for',
+    'a hostel with a communal kitchen and strong opinions',
+    'a hostel he described as \'fine, actually\'',
+    'a hostel where everyone was passing through',
+    'a hostel he ended up running for three months',
+    'a hostel with a blackboard poetry wall',
+    'a hostel where he became known as \'the American\'',
+    'a hostel that smelled like effort and laundry',
+    'a hostel in the cheap part of an expensive city',
+    'a hostel with a rooftop and a philosophy',
+];
+const P_DEATH = [
+    'dies','dies peacefully','dies under circumstances the series won\'t specify',
+    'simply stops appearing after Episode 7','is presumed dead by Episode 6',
+    'achieves something meaningful, then dies','falls in love and subsequently dies',
+    'dies (details in the finale)','dies off-screen in Episode 9',
+    'goes quiet after Episode 8 — the series doesn\'t address this directly',
+    'disappears in the finale — cause unconfirmed',
+    'dies in a way the series treats as beautiful and earned',
+    'dies having said what needed to be said',
+    'dies in Episode 9, but the series keeps going for one more',
+    'is alive at the end. First time.',
+    'dies — but this was always where it was going',
+    'the series ends before confirming anything, but everyone understands',
+    'dies on a Tuesday, specifically',
+    'dies at the end of a perfect episode',
+    'does not die. The series treats this as equally sad.',
+];
+const P_LOVE = [
+    'falls in love with a local','meets someone he can\'t explain',
+    'gets into something complicated','enters a relationship the series treats seriously',
+    'meets someone who appears to understand him',
+    'falls in love for what may be the first real time',
+    'meets someone named after a month','develops feelings that are not unrequited',
+    'falls for someone who has read his earlier work',
+    'meets someone at the hostel. It\'s real this time.',
+    'enters what the series calls a \'significant entanglement\'',
+    'meets someone at a market and doesn\'t leave',
+    'falls for someone who finds him funny on purpose',
+    'meets someone who speaks better English than he does',
+    'develops a relationship the series refuses to oversimplify',
+    'meets someone. They both know what it is.',
+    'forms an attachment the finale earns',
+];
+const P_LANG = [
+    'Danish','Norwegian','Icelandic','Welsh','Portuguese','French',
+    'Swedish','Finnish','Basque','Catalan','Faroese','Dutch',
+    'Italian','Romanian','Estonian','Greek',
+];
+const P_THEME3 = [
+    'Explores the beauty of everyday life. Believes, sincerely, that everything is poetry.',
+    'Processing the previous two seasons out loud, without embarrassment.',
+    'A show about noticing things. Almost no conflict. People respond to it.',
+    'Quieter than the first two. Better for it, arguably.',
+    'Primarily about gratitude, which he couldn\'t have said in Season 1.',
+    'He has learned something. The series is about what, exactly.',
+    'The comeback arc. Handled without irony. People are surprised.',
+    'About starting over and meaning it this time.',
+    'He\'s okay. The series documents this carefully and without sentimentality.',
+    'One long season of figuring out what to do next. He figures it out.',
+    'About being somewhere and staying there, on purpose.',
+    'About slowing down. He\'s good at it now.',
+    'About the space between who you were and who you\'re becoming.',
+    'About what it means to be ordinary, finally, and to be fine with that.',
+    'He believes everything is beautiful. He\'s not wrong.',
+];
+const P_BONUS = [
+    { lbl:'Newsletter', name: n=>`${n}: Dispatches`, desc:`A weekly newsletter, eventually. He wrote 4 issues, went dark for 6 months, resumed. Still ongoing. The About page hasn't been updated since launch.` },
+    { lbl:'Documentary', name: n=>`Who Is ${n}? (Working Title)`, desc:`A feature-length documentary that was not his idea. He cooperated. He has opinions about the final edit that he's expressed privately.` },
+    { lbl:'Zine', name: n=>`The ${n} Zine (Issues 1–3)`, desc:`Three issues, printed at a local copy shop. Issue 3 is the best one. Availability is limited because he ran out and hasn't reprinted.` },
+    { lbl:'One-Person Show', name: n=>`An Evening With ${n}`, desc:`A live theatrical piece, performed twice. Both shows sold out the specific venue. He's been meaning to film it for two years.` },
+    { lbl:'TED Talk (Rejected)', name: n=>`The ${n} Talk (Rejected by TEDx ${pick(['Portland','Denver','Austin','Brooklyn','Phoenix','Tucson'])})`, desc:`A 14-minute presentation he submitted to three TEDx chapters. Still believes deeply in the central thesis. Has given the talk privately.` },
+    { lbl:'Substack', name: n=>`${n} on Everything`, desc:`A Substack. 847 subscribers. Posts infrequently. The last one was very good. He\'s been working on the next one for a while.` },
+    { lbl:'Short Film', name: n=>`${n}: A Short Film (Vimeo)`, desc:`A 12-minute short film. Shot in one weekend with borrowed equipment. Currently on Vimeo with 1,200 views. He doesn't bring it up, but it's good.` },
+    { lbl:'Recurring Column', name: n=>`The ${n} Column`, desc:`A recurring column in a publication he'd rather not specify. Ran for two years. He left on good terms, he says.` },
+    { lbl:'Limited Series (Abandoned)', name: n=>`${n}: A Visual Series (Unfinished)`, desc:`An Instagram visual series he started and discontinued after seven episodes. The seven that exist are considered complete by him.` },
+    { lbl:'Audiobook (Unrelated)', name: n=>`${n} Reads: Selected ${pick(P_TYPE)}`, desc:`A standalone audiobook — not his own work — narrated by him. Available on Audible. He describes the experience as \'clarifying\'.` },
+    { lbl:'Poetry Collection (Bonus)', name: n=>`${n}: Additional ${pick(P_TYPE)} (Uncollected)`, desc:`A loose collection of work that didn't fit either book. Distributed via PDF. Downloaded more than expected. May become Book III.` },
+    { lbl:'Podcast (Spin-off)', name: n=>`${n} After Hours`, desc:`A spin-off podcast he started during the hostel period. Four episodes. No structure. Considered by listeners to be his best work, which he finds funny.` },
+];
+
+function generatePersonal() {
+    const name  = document.getElementById('gen-name').value.trim()  || 'Your Name';
+    const start = document.getElementById('gen-start').value.trim() || 'aspiring something';
+
+    const s1 = pick(P_S1), s2 = pick(P_S2), c3 = pick(P_C3);
+    const loc = pick(P_PLACE), wt = pick(P_TYPE), wq = pick(P_QUAL);
+    const incident = pick(P_INCIDENT), venue2 = pick(P_VENUE2);
+    const hostel = pick(P_HOSTEL), death = pick(P_DEATH), love = pick(P_LOVE);
+    const lang = pick(P_LANG), theme3 = pick(P_THEME3);
+    const n  = 50 + ~~(Math.random() * 80);
+    const pct = 18 + ~~(Math.random() * 22);
+    const hasBonus = Math.random() > 0.38;
+    const bonus = hasBonus ? pick(P_BONUS) : null;
+
+    const pods = [
+        gi('Podcast I',  `${name}: ${start} ${s1}`,  `An earnest ${start} shares their expertise and perspective with the world. The series ends due to ${incident}.`),
+        gi('Podcast II', `${name}: Canceled ${start} ${s2}`, `After ${incident}, ${name} relocates to ${venue2} and adopts a more self-interested approach to everything.`),
+        gi('Podcast III',`${name}'s Everything Club (${c3})`, `Reformed. Living in ${hostel}. ${theme3}`),
+        gi('Podcast IV', `${name} Does ${loc}`, `Relocates to ${loc}. ${love}. ${death}.`),
+    ];
+    if (bonus) pods.push(gi(bonus.lbl, bonus.name(name), bonus.desc));
+
+    const books = [
+        gi('Book I',  `The ${name} ${wt}: 1–${n}: ${n} ${wt} That ${wq}`, `Written during a period of personal confinement. Self-published. Available on demand.`, true),
+        gi('Book II', `The ${name} ${wt}: ${n+1}–Death: A Posthumous Collection`, `Compiled by a sibling and a foreign acquaintance after his passing. ~${pct}% in ${lang}. This is not a translation.`, true),
+    ];
+
+    const out = document.getElementById('gen-output');
+    out.innerHTML = `<div style="font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;color:var(--yellow);margin-bottom:1rem">Your multimedia universe${bonus?' (with bonus)':''}:</div><div style="display:flex;flex-direction:column;gap:.75rem;margin-bottom:1.25rem">${pods.join('')}</div><div style="display:flex;flex-direction:column;gap:.75rem">${books.join('')}</div>`;
+    out.style.display = 'block';
+    out.classList.add('spin');
+    setTimeout(() => out.classList.remove('spin'), 400);
+}
+function gi(num, title, desc, book=false) {
+    const col = book ? 'var(--lavender)' : 'var(--yellow)';
+    return `<div style="background:rgba(255,255,255,.04);border-left:3px solid ${col};padding:.7rem 1rem;border-radius:0 4px 4px 0"><div style="font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(250,247,240,.32);margin-bottom:.2rem">${num}</div><div style="font-family:var(--font-display);font-size:.97rem;margin-bottom:.22rem">${title}</div><div style="font-size:.76rem;color:rgba(250,247,240,.42);line-height:1.55">${desc}</div></div>`;
+}
+
+// ─── Audiobook Player ─────────────────────────────────
+const audio = document.getElementById('audio');
+let playing = false;
+document.getElementById('audio-file').addEventListener('change', e => {
+    const f=e.target.files[0]; if(!f)return;
+    audio.src=URL.createObjectURL(f);
+    document.getElementById('player-track').textContent=f.name.replace(/\.[^/.]+$/,'');
+    playing=false; syncPlayBtn();
+});
+document.getElementById('btn-pp').addEventListener('click', ()=>{ if(!audio.src)return; playing?audio.pause():audio.play(); playing=!playing; syncPlayBtn(); });
+document.getElementById('btn-rw').addEventListener('click', ()=>{ audio.currentTime=Math.max(0,audio.currentTime-15); });
+document.getElementById('btn-ff').addEventListener('click', ()=>{ audio.currentTime=Math.min(audio.duration||0,audio.currentTime+30); });
+audio.addEventListener('timeupdate', ()=>{ if(!audio.duration)return; document.getElementById('progress-fill').style.width=(audio.currentTime/audio.duration*100)+'%'; document.getElementById('player-time').textContent=fmt(audio.currentTime)+' / '+fmt(audio.duration); });
+audio.addEventListener('ended', ()=>{ playing=false; syncPlayBtn(); });
+document.getElementById('progress-bar').addEventListener('click', function(e){ if(!audio.duration)return; const r=this.getBoundingClientRect(); audio.currentTime=((e.clientX-r.left)/r.width)*audio.duration; });
+function syncPlayBtn() { document.getElementById('btn-pp').innerHTML=playing?'<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>':'<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>'; }
+function fmt(s) { if(isNaN(s))return'0:00'; return`${~~(s/60)}:${String(~~(s%60)).padStart(2,'0')}`; }
+
+// ─── Book upload ──────────────────────────────────────
+document.getElementById('book-file').addEventListener('change', e => {
+    const f=e.target.files[0]; if(!f)return;
+    if(f.name.endsWith('.txt')){ const r=new FileReader(); r.onload=ev=>openReadModalContent(f.name.replace(/\.[^/.]+$/,''),ev.target.result); r.readAsText(f); }
+    else { alert('PDF in-browser reading coming soon. Upload a .txt file for now.'); }
+});
+
+// ─── Photo upload ─────────────────────────────────────
+function setPhoto(idx, input) {
+    const f=input.files[0]; if(!f)return;
+    const url=URL.createObjectURL(f);
+    const frame=document.getElementById('pf'+idx);
+    let img=frame.querySelector('img');
+    if(!img){ img=document.createElement('img'); frame.appendChild(img); }
+    img.src=url; img.style.cssText='width:100%;height:100%;object-fit:cover;display:block;';
+}
+
+// ─── Monte ────────────────────────────────────────────
+const ALL_PHOTOS=['dmpic1.jpg','dmpic2.jpeg','dmpic3.jpg','dmpic4.jpeg','dmpic5.jpg','dmpic6.jpg','dmpic7.jpg','dmpic8.jpg','dmpic9.jpg','dmpic10.jpg','dmpic11.jpg','dmpic12.jpg','dmpic13.jpg','dmpic14.png','dmpic15.jpg','winepic.jpg','toga2.jpg','mayatdms.png','IMG_6124.jpeg','IMG_0790.jpeg','IMG_0021%202.jpeg','IMG_0578%202.jpeg','69671260933__1EA51096-212B-4A9D-A1C3-1ED981E63A6C.jpeg'];
+let montePhotos=[], monteState='idle', gordoSlot=0, slotPos=[0,1,2], censored=false;
+const LEFTS=['0%','34%','68%'];
+const TAPE_ANGLES=[-1.5, 1.8, -2.2];
+
+function pickMontePhotos(){ const p=[...ALL_PHOTOS]; for(let i=p.length-1;i>0;i--){const j=~~(Math.random()*(i+1));[p[i],p[j]]=[p[j],p[i]];} montePhotos=p.slice(0,3); }
+
+function renderMontePhotos(){
+    for(let i=0;i<3;i++){
+        const f=document.getElementById('mcf-'+i);
+        f.innerHTML=`
+            <div class="mc-tape"></div>
+            <img src="${montePhotos[i]}" alt="" style="transform:translateX(-50%) rotate(${TAPE_ANGLES[i]}deg)">
+        `;
+        censored ? f.classList.add('censored') : f.classList.remove('censored');
+        document.getElementById('mcg-'+i).innerHTML=`<img src="gordo1.png" alt="Gordo">`;
+        // reset cup images to front-facing
+        document.getElementById('mci-'+i).classList.remove('hide');
+        document.getElementById('mct-'+i).classList.remove('show');
+    }
+}
+
+function applySlotPos(){ for(let i=0;i<3;i++) document.getElementById('ms-'+i).style.left=LEFTS[slotPos[i]]; }
+
+// swap a slot to tilt image (cup lifting), optionally show gordo
+function tiltCup(i, showGordo=false){
+    document.getElementById('mci-'+i).classList.add('hide');
+    document.getElementById('mct-'+i).classList.add('show');
+    if(showGordo) document.getElementById('mcg-'+i).classList.add('show');
+}
+// restore a slot to front-facing cup
+function untiltCup(i){
+    document.getElementById('mci-'+i).classList.remove('hide');
+    document.getElementById('mct-'+i).classList.remove('show');
+    document.getElementById('mcg-'+i).classList.remove('show');
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+    document.getElementById('monte-start').style.display='inline-block';
+    pickMontePhotos(); renderMontePhotos();
+});
+
+function startMonte(){
+    if(monteState!=='idle')return; monteState='peek'; gordoSlot=~~(Math.random()*3); slotPos=[0,1,2];
+    pickMontePhotos(); renderMontePhotos(); applySlotPos();
+    for(let i=0;i<3;i++) document.getElementById('mc-'+i).classList.remove('pickable');
+    document.getElementById('monte-msg').textContent='Watch closely…';
+    document.getElementById('monte-sub-msg').textContent='';
+    document.getElementById('monte-restart').style.display='none';
+    document.getElementById('monte-start').style.display='none';
+    // peek: tilt gordo's cup briefly to show the ball underneath
+    setTimeout(()=>{
+        tiltCup(gordoSlot, true);
+        setTimeout(()=>{
+            untiltCup(gordoSlot);
+            setTimeout(doShuffle, 380);
+        }, 1600);
+    }, 500);
+}
+
+function doShuffle(){
+    monteState='shuffling';
+    document.getElementById('monte-msg').textContent='';
+    const n=5+~~(Math.random()*4); let delay=0;
+    for(let s=0;s<n;s++){
+        delay+=Math.max(190,340-s*18);
+        setTimeout(()=>{
+            const a=~~(Math.random()*3); let b; do{b=~~(Math.random()*3);}while(b===a);
+            const iA=slotPos.indexOf(a),iB=slotPos.indexOf(b);
+            [slotPos[iA],slotPos[iB]]=[slotPos[iB],slotPos[iA]];
+            applySlotPos();
+        },delay);
+    }
+    setTimeout(()=>{
+        monteState='picking';
+        for(let i=0;i<3;i++) document.getElementById('mc-'+i).classList.add('pickable');
+        document.getElementById('monte-msg').textContent="Where's Gordo?";
+    }, delay+220);
+}
+
+function pickCard(slotIdx){
+    if(monteState!=='picking')return; monteState='revealed';
+    for(let i=0;i<3;i++) document.getElementById('mc-'+i).classList.remove('pickable');
+    const won = slotIdx===gordoSlot;
+    // tilt all cups in sequence, gordo slot last (or first if wrong)
+    const order = won
+        ? [0,1,2].filter(i=>i!==gordoSlot).concat([gordoSlot])
+        : [0,1,2].filter(i=>i!==gordoSlot).concat([gordoSlot]);
+    order.forEach((slot, idx)=>{
+        setTimeout(()=> tiltCup(slot, slot===gordoSlot), idx*180);
+    });
+    setTimeout(()=>{
+        document.getElementById('mcg-'+gordoSlot).classList.add('show');
+        if(won){
+            document.getElementById('monte-msg').textContent='🎉 Found Gordo!';
+            document.getElementById('monte-sub-msg').textContent='Impressive. The face-blackout was narrowly avoided.';
+            censored=false;
+        } else {
+            document.getElementById('monte-msg').textContent='😬 Gordo eludes you.';
+            document.getElementById('monte-sub-msg').textContent='Your photos will be redacted until you win.';
+            censored=true;
+        }
+        renderMontePhotos();
+        document.getElementById('monte-restart').style.display='inline-block';
+        monteState='idle';
+    }, 900);
+}
+
+// ─── Modals ───────────────────────────────────────────
+const SAMPLES = {
+    employment:{eyebrow:'Service 01',title:'Full-Time Employment',body:`<p><em>Sample: Relevant professional experience, presented honestly.</em></p><p><strong>What you get:</strong> A person with 15+ years of professional writing experience who will show up and produce good work. Strong opinions about clarity.</p><p><strong>Previous experience includes:</strong> Editorial oversight, staff writing, content strategy (adjacent), and managing a recreational soccer facility — which prepared me for most professional environments.</p>`},
+    screenplay:{eyebrow:'Service 02',title:'Feature Screenplay',body:`<p><em>Sample excerpt — INT. JERSEY MIKE'S — NIGHT</em></p><p>DEREK (40s, formerly hopeful) sits in the last booth. The restaurant is technically closed.</p><p><strong>DEREK</strong><br>I'm not leaving until I finish this.</p><p><strong>EMPLOYEE</strong><br>The sub?</p><p><strong>DEREK</strong><br>(long pause)<br>The sub.</p><p class="footnote">Full-length scripts available upon request. I have a lot of ideas to work with. Twins separated at birth find each other on a cruise. Twins separated at birth find each other on a plane. Twins separated at birth live happy lives, never find each other.</p>`},
+    novel:{eyebrow:'Service 03',title:'Novel',body:`<p><em>Sample — Opening paragraph, Chapter One:</em></p><p>The thing about starting over is that it implies you had a clear starting point to begin with, which most people don't.</p><p class="footnote">I can also write in bad Danish, but I think I've proven there's not a market for that.</p>`},
+    podcast:{eyebrow:'Service 04',title:'Podcast Series',body:`<p><em>Just scroll up. I've said enough.</em></p>`},
+    card:{eyebrow:'Service 05',title:'Greeting Card',body:`<p><strong>Birthday (adult):</strong><br>Your friend bought you this card because society made him. This card was cheap to make and has a lot of space for him to write. He knows you wouldn't want him spending $6 on a card, but you still want a card, and you appreciate sincere messages. That's why he got you this card.</p><p><strong>Sympathy:</strong><br>Your friend bought you this card because society made them. This card was cheap to make and has a lot of space for them to write. They know you wouldn't want them spending $6 on a card, but you still want a card, and you appreciate sincere messages. That's why they got you this card. They're very sorry. We are, too (the card makers).</p><p><strong>Birthday (child):</strong><br>Happy birthday, tyke!</p><p class="footnote">Wouldn't it be nuts if my middle name were Hall? Dustin Hall Mark. Just something I thought of just then. Not a terrible idea for my card company, if that's what ends up happening. Actually though, I think my company would be called LOSS LEADER CARDS and would be like the samples above and on the back of each card it would say, like, "These cards lose money, but that's what it's all about. Go buy one of our other products." and it would link to some Ponzi scheme or something.</p>`},
+    corporate:{eyebrow:'Service 06',title:'Corporate Copy',body:`<p><strong>Multi-hyphenate creative:</strong><br><em>"Come visit my website, look at all the things I offer, have a little fun."</em></p><p>Actual deliverables: Website copy, product descriptions, brand voice guides, email campaigns.</p><p class="footnote">Trust me, I can be really corporate.</p>`},
+    toast:{eyebrow:'Service 07',title:'Best Man / Toast',body:`<p>I've known Kurt for a long time. It's been a privilege watching him turn into this good version of Kurt. I love the guy.</p><p>[Story about getting lost, very cold, no fire, just body heat, formative experience, never the same]</p><p>[Kurt's Bride], then the same thing.</p><p class="footnote">Sure, I'll be your buddy for a night.</p>`},
+    consult:{eyebrow:'Service 09',title:'Humor Consultation',body:`<p>People probably aren't telling you "you're not funny" enough. I'll be a brave soldier and tell you that as much as you need.</p><p class="footnote">Neither of us will look forward to this.</p>`},
+    voiceover:{eyebrow:'Service 10',title:'Voiceover Work',body:`<p>I'll be honest, there are better voices out there. But I am human and my voice conveys it.</p><p class="footnote">Call for preview.</p>`},
+    eulogy:{eyebrow:'Service 08',title:'Eulogy',body:`<p>More than anything, [name] was a friend.</p><p><em>For not interesting:</em> [name] was a friend. But they were also <em><strong>really</strong></em> interesting.</p><p class="footnote">Like it or not, it's going to happen. And I'm always available.</p>`},
+    childrens:{eyebrow:'Service 11',title:"Children's Book",body:`<p>Gerald did not want to go to the party.<br>"I don't want to go," said Gerald.<br>"I know," said his mother.<br>They went to the party.</p><p>Gerald had a fine time at the party. He did not admit this. His mother already knew.</p><p class="footnote">Suitable for any age you'd like to target, and that age's nostalgic parents.</p>`},
+};
+function openSample(key){ const s=SAMPLES[key]; document.getElementById('s-eyebrow').textContent=s.eyebrow; document.getElementById('s-title').textContent=s.title; document.getElementById('s-body').innerHTML=s.body; document.getElementById('sample-overlay').classList.add('open'); document.body.style.overflow='hidden'; }
+const BOOK_CONTENT = {
+    book1:{title:'Book One',body:`<p>This is where the full text of <em>Book One</em> would appear. Upload your book file to display the complete text here.</p>`},
+    book2:{title:'Book Two',body:`<p>This is where the full text of <em>Book Two</em> would appear. Note that approximately one-third is in Danish.</p><p>Han vidste ikke, hvad han ledte efter. Men han vidste, at det ikke var her.</p>`}
+};
+function openReadModal(book){ const c=BOOK_CONTENT[book]; document.getElementById('r-title').textContent=c.title; document.getElementById('r-body').innerHTML=c.body; document.getElementById('read-overlay').classList.add('open'); document.body.style.overflow='hidden'; }
+function openReadModalContent(name,text){ document.getElementById('r-title').textContent=name; document.getElementById('r-body').innerHTML=text.split(/\n\n+/).map(p=>`<p>${p.trim().replace(/\n/g,'<br>')}</p>`).join(''); document.getElementById('read-overlay').classList.add('open'); document.body.style.overflow='hidden'; }
+function closeModal(id){ document.getElementById(id).classList.remove('open'); document.body.style.overflow=''; }
+function closeOverlay(e,id){ if(e.target===e.currentTarget)closeModal(id); }
+document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ document.querySelectorAll('.modal-overlay.open').forEach(m=>m.classList.remove('open')); document.body.style.overflow=''; } });
+
+// ─── Anthology Wall ───────────────────────────────────
+const ANTHOLOGY_KEY = 'dm_anthology_v1';
+
+function getAnthology() {
+    try { return JSON.parse(localStorage.getItem(ANTHOLOGY_KEY)) || []; }
+    catch(e) { return []; }
+}
+
+function saveAnthology(data) {
+    localStorage.setItem(ANTHOLOGY_KEY, JSON.stringify(data));
+}
+
+let pendingPoem = null; // holds current generated poem while save modal is open
+
+function openSaveModal() {
+    const lines = [...document.querySelectorAll('#poem-output .poem-line')]
+        .map(el => el.firstChild.textContent.trim());
+    if (!lines.length) return;
+    const attrib = document.getElementById('poem-attrib').textContent;
+    pendingPoem = { lines, attrib };
+    document.getElementById('save-poem-title').value = '';
+    document.getElementById('save-poem-author').value = '';
+    document.getElementById('save-overlay').classList.add('open');
+}
+
+function closeSaveModal(e) {
+    if (e.target === e.currentTarget) document.getElementById('save-overlay').classList.remove('open');
+}
+
+function confirmSave() {
+    if (!pendingPoem) return;
+    const title  = document.getElementById('save-poem-title').value.trim()  || 'Untitled';
+    const author = document.getElementById('save-poem-author').value.trim() || 'Anonymous';
+    const entry = {
+        id: Date.now(),
+        title,
+        author,
+        lines: pendingPoem.lines,
+        attrib: pendingPoem.attrib,
+        date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+    };
+    const data = getAnthology();
+    data.unshift(entry); // newest first
+    saveAnthology(data);
+    document.getElementById('save-overlay').classList.remove('open');
+    pendingPoem = null;
+    renderAnthology();
+
+    // briefly flash the save button
+    const btn = document.querySelector('.poem-save-btn');
+    btn.textContent = 'Saved ✓';
+    setTimeout(() => btn.textContent = 'Save to Anthology', 2200);
+}
+
+function deletePoem(id) {
+    const data = getAnthology().filter(e => e.id !== id);
+    saveAnthology(data);
+    renderAnthology();
+}
+
+function toggleExpand(id) {
+    const poemEl = document.getElementById('poem-text-' + id);
+    const btnEl  = document.getElementById('expand-btn-' + id);
+    if (poemEl.classList.contains('expanded')) {
+        poemEl.classList.remove('expanded');
+        btnEl.textContent = 'Show all';
+    } else {
+        poemEl.classList.add('expanded');
+        btnEl.textContent = 'Collapse';
+    }
+}
+
+function renderAnthology() {
+    const data  = getAnthology();
+    const grid  = document.getElementById('anthology-grid');
+    const empty = document.getElementById('anthology-empty');
+    const count = document.getElementById('anthology-count');
+
+    count.textContent = `${data.length} poem${data.length !== 1 ? 's' : ''} saved`;
+
+    if (data.length === 0) {
+        grid.innerHTML = '';
+        grid.appendChild(empty);
+        return;
+    }
+
+    grid.innerHTML = data.map(entry => `
+        <div class="anthology-card">
+            <button class="anthology-card-del" onclick="deletePoem(${entry.id})" title="Remove">&times;</button>
+            ${entry.title !== 'Untitled' ? `<div class="anthology-card-title">${entry.title}</div>` : ''}
+            <div class="anthology-card-poem" id="poem-text-${entry.id}">
+                ${entry.lines.map(l => `<span style="display:block">${l}</span>`).join('')}
+            </div>
+            ${entry.lines.length > 6 ? `<button class="anthology-expand" id="expand-btn-${entry.id}" onclick="toggleExpand(${entry.id})">Show all</button>` : ''}
+            <div class="anthology-card-foot">
+                <span class="anthology-card-sig">${entry.author}</span>
+                <span class="anthology-card-meta">${entry.date}<br>${entry.attrib}</span>
+            </div>
+        </div>
+    `).join('');
+}
+
+// load anthology on page ready
+document.addEventListener('DOMContentLoaded', renderAnthology);
+
+// ─── Fact or Fiction ──────────────────────────────────
+const QUESTIONS=[
+    {claim:"The Louisiana Purchase in 1803 roughly doubled the size of the United States.",fact:true,exp:"True. Napoleon sold the territory for about $15 million — roughly 3 cents per acre."},
+    {claim:"Thomas Jefferson was the second President of the United States.",fact:false,exp:"Fiction. Jefferson was third. John Adams was second."},
+    {claim:"Alaska was purchased from Canada in 1867.",fact:false,exp:"Fiction. Alaska was purchased from Russia for $7.2 million."},
+    {claim:"The 19th Amendment, ratified in 1920, gave women the right to vote.",fact:true,exp:"True. It took 144 years after the country's founding."},
+    {claim:"Neil Armstrong was the first American in space.",fact:false,exp:"Fiction. Alan Shepard was first American in space, May 1961."},
+    {claim:"Abraham Lincoln belonged to the Republican Party.",fact:true,exp:"True. He was the first Republican president, elected 1860."},
+    {claim:"Hawaii was the 50th — and last — state admitted to the Union.",fact:true,exp:"True. Alaska was 49th, Hawaii 50th. Both joined in 1959."},
+    {claim:"Benjamin Franklin served as President of the United States.",fact:false,exp:"Fiction. Franklin never became president, despite the $100 bill."},
+    {claim:"The Civil War ended in 1865.",fact:true,exp:"True. Lee surrendered to Grant at Appomattox Court House on April 9, 1865."},
+    {claim:"The Declaration of Independence was adopted on July 4, 1776.",fact:true,exp:"True. Though most signing happened August 2nd."},
+    {claim:"The Statue of Liberty was a gift from Mexico.",fact:false,exp:"Fiction. It was a gift from France, dedicated October 28, 1886."},
+    {claim:"The Manhattan Project was the codename for the U.S. nuclear weapons program in WWII.",fact:true,exp:"True. It ran 1942–1946 and employed 130,000 people."},
+    {claim:"Dustin worked as a staff writer at a Houston-area newspaper.",fact:true,exp:"True. Houston Community Newspapers, 2008–2011."},
+    {claim:"Dustin is a two-time Webby Award winner.",fact:false,exp:"Fiction. He is not. He would like to be."},
+    {claim:"One of his pieces is titled 'Vibrator or Nickname of a Kid on My Son's Little League Team.'",fact:true,exp:"Completely true. Published 2021."},
+    {claim:"Dustin has a black belt in Brazilian jiu-jitsu.",fact:false,exp:"Fiction. He managed a recreational soccer facility."},
+    {claim:"Dustin was an Associate Editor at a collegiate humor publication.",fact:true,exp:"True. Texas Travesty at UT Austin."},
+];
+let pool=[],qIndex=0,correct=0,total=0,answered=false;
+function shuffle(arr){ return [...arr].sort(()=>Math.random()-0.5); }
+function initGame(){ pool=shuffle(QUESTIONS); qIndex=0; correct=0; total=0; answered=false; showQ(); }
+function showQ(){ const q=pool[qIndex%pool.length]; document.getElementById('game-claim').textContent=q.claim; document.getElementById('game-card').classList.remove('flipped'); document.getElementById('game-next').style.display='none'; answered=false; }
+function guess(isFact){ if(answered)return; answered=true; total++; const q=pool[qIndex%pool.length]; const right=isFact===q.fact; if(right)correct++; document.getElementById('result-emoji').textContent=right?'🎉':'😬'; document.getElementById('result-head').textContent=right?'Correct!':'Wrong!'; document.getElementById('result-exp').textContent=q.exp; document.getElementById('game-card').classList.add('flipped'); document.getElementById('game-next').style.display='inline-block'; document.getElementById('sc-right').textContent=correct; document.getElementById('sc-total').textContent=total; }
+function nextQ(){ qIndex++; showQ(); }
+initGame();
+
+// ─── Poetry Recombinator ──────────────────────────────
+let poetryPool = [];
+let booksLoaded = false;
+
+async function loadPoetryBooks() {
+    const statusEl = document.getElementById('poem-status');
+    const btnEl    = document.getElementById('poem-gen-btn');
+    try {
+        const [res1, res2] = await Promise.all([
+            fetch('book1_manuscript.docx'),
+            fetch('book2_manuscript.docx')
+        ]);
+        if (!res1.ok || !res2.ok) throw new Error('Files not found');
+        const [ab1, ab2] = await Promise.all([res1.arrayBuffer(), res2.arrayBuffer()]);
+        const [r1, r2]   = await Promise.all([
+            mammoth.extractRawText({ arrayBuffer: ab1 }),
+            mammoth.extractRawText({ arrayBuffer: ab2 })
+        ]);
+
+        function extractLines(rawText, vol) {
+            return rawText
+                .split('\n')
+                .map(l => l.trim())
+                .filter(l => {
+                    if (l.length < 6 || l.length > 160) return false;
+                    // skip lines that are clearly structural / not poetic
+                    if (/^(poem\s*\d|chapter|\d+\.?\s*$|the dustin mark|volume|—{2,}|by |isbn|copyright|all rights|printed|published|dedication|acknowledgement)/i.test(l)) return false;
+                    if (/^\d+$/.test(l)) return false; // bare page numbers
+                    return true;
+                })
+                .map(l => ({ line: l, vol }));
+        }
+
+        const lines1 = extractLines(r1.value, 'I');
+        const lines2 = extractLines(r2.value, 'II');
+        poetryPool = [...lines1, ...lines2];
+        booksLoaded = true;
+
+        const total = poetryPool.length;
+        statusEl.textContent = `${total} lines across both volumes`;
+        btnEl.disabled = false;
+    } catch (err) {
+        statusEl.textContent = 'Books unavailable';
+        console.warn('Poetry load error:', err);
+    }
+}
+
+function generatePoem() {
+    if (!booksLoaded || poetryPool.length === 0) return;
+    const n = parseInt(document.getElementById('poem-slider').value);
+    const outputEl = document.getElementById('poem-output');
+    const footerEl = document.getElementById('poem-footer');
+    const attribEl = document.getElementById('poem-attrib');
+
+    // weighted shuffle — Fisher-Yates, then slice
+    const pool = [...poetryPool].sort(() => Math.random() - 0.5);
+    const selected = pool.slice(0, Math.min(n, pool.length));
+
+    outputEl.classList.add('visible');
+    outputEl.classList.add('spin');
+    setTimeout(() => outputEl.classList.remove('spin'), 380);
+
+    outputEl.innerHTML = selected
+        .map(({ line, vol }) =>
+            `<span class="poem-line">${line}<span class="poem-line-src">Vol.${vol}</span></span>`)
+        .join('');
+
+    const fromI  = selected.filter(l => l.vol === 'I').length;
+    const fromII = selected.filter(l => l.vol === 'II').length;
+    attribEl.textContent = `Vol. I — ${fromI} lines · Vol. II — ${fromII} lines`;
+    footerEl.classList.add('visible');
+}
+
+function copyPoem() {
+    const lines = [...document.querySelectorAll('#poem-output .poem-line')]
+        .map(el => el.firstChild.textContent.trim())
+        .join('\n');
+    navigator.clipboard.writeText(lines).then(() => {
+        const btn = document.querySelector('.poem-copy-btn');
+        btn.textContent = 'Copied ✓';
+        setTimeout(() => btn.textContent = 'Copy poem', 2200);
+    });
+}
+
+document.addEventListener('DOMContentLoaded', loadPoetryBooks);
+</script>
+</body>
+</html>
