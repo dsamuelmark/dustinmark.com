@@ -1249,7 +1249,7 @@
         }
         .marquee-inner {
             display: inline-block;
-            animation: marquee-scroll 60s linear infinite;
+            animation: marquee-scroll 120s linear infinite;
             font-family: var(--font-display);
             font-size: 0.78rem;
             font-weight: 800;
@@ -1258,7 +1258,9 @@
             color: rgba(15,15,23,0.75);
             flex-shrink: 0;
         }
-        .marquee-strip:hover .marquee-inner { animation-play-state: paused; }
+        .marquee-strip { cursor: pointer; }
+        .marquee-strip:hover .marquee-inner,
+        .marquee-strip.paused .marquee-inner { animation-play-state: paused; }
         @keyframes marquee-scroll {
             from { transform: translateX(0); }
             to   { transform: translateX(-50%); }
@@ -2536,7 +2538,7 @@ setInterval(() => {
         wordEl.style.opacity = '1';
         setBlurb(lastWord);
     }, 280);
-}, 3600);
+}, 8000);
 
 // ─── Fade-in observer ─────────────────────────────────
 // ─── Scroll Reveals ──────────────────────────────────
@@ -2607,6 +2609,13 @@ setInterval(() => {
     document.querySelectorAll('.fade-in, .reveal-title, .reveal-label, .stat-num[data-target]').forEach(el => obs.observe(el));
 
 })();
+
+// ─── Marquee hover pause ────────────────────────────────
+const marqueeStrip = document.querySelector('.marquee-strip');
+if (marqueeStrip) {
+    marqueeStrip.addEventListener('mouseenter', () => marqueeStrip.classList.add('paused'));
+    marqueeStrip.addEventListener('mouseleave', () => marqueeStrip.classList.remove('paused'));
+}
 
 // ─── Horizontal scroll drag ────────────────────────────
 const track = document.getElementById('work-scroll-track');
